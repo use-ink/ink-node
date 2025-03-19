@@ -1,5 +1,5 @@
 [package]
-name = "contracts-parachain-runtime"
+name = "ink-parachain-runtime"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true

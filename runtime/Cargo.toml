@@ -1,5 +1,5 @@
 [package]
-name = "contracts-node-runtime"
+name = "ink-node-runtime"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true

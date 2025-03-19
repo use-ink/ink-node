@@ -113,7 +113,7 @@ pub fn local_testnet_config() -> ChainSpec {
 		get_account_id_from_seed::<sr25519::Public>("Alice"),
 		1000.into(),
 	))
-	.with_protocol_id("contracts-local")
+	.with_protocol_id("ink-local")
 	.with_properties(properties)
 	.build()
 }

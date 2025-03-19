@@ -1,5 +1,5 @@
 [package]
-name = "contracts-node"
+name = "ink-node"
 version.workspace = true
 authors.workspace = true
 description = "Substrate node configured for smart contracts via `pallet-revive`."
@@ -13,7 +13,7 @@ repository.workspace = true
 targets = ["x86_64-unknown-linux-gnu"]
 
 [[bin]]
-name = "substrate-contracts-node"
+name = "ink-node"
 path = "src/main.rs"
 
 [dependencies]
@@ -27,10 +27,10 @@ serde_json = { workspace = true }
 wasmtime = { workspace = true }
 
 # Local
-contracts-parachain-runtime = { path = "../parachain-runtime", features = [
+ink-parachain-runtime = { path = "../parachain-runtime", features = [
   "parachain",
 ], version = "0.42.0" }
-contracts-node-runtime = { path = "../runtime", version = "0.42.0" }
+ink-node-runtime = { path = "../runtime", version = "0.42.0" }
 
 # Substrate
 frame-benchmarking = { workspace = true }
@@ -95,10 +95,10 @@ substrate-build-script-utils = { workspace = true }
 [features]
 default = []
 runtime-benchmarks = [
-	"contracts-parachain-runtime/runtime-benchmarks",
+	"ink-parachain-runtime/runtime-benchmarks",
 	"polkadot-cli/runtime-benchmarks",
 ]
 try-runtime = [
 	"try-runtime-cli/try-runtime",
-	"contracts-parachain-runtime/try-runtime",
+	"ink-parachain-runtime/try-runtime",
 ]

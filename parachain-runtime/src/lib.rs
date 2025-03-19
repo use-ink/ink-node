@@ -209,8 +209,8 @@ impl_opaque_keys! {
 
 #[sp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: alloc::borrow::Cow::Borrowed("contracts-parachain"),
-	impl_name: alloc::borrow::Cow::Borrowed("contracts-parachain"),
+	spec_name: alloc::borrow::Cow::Borrowed("ink-parachain"),
+	impl_name: alloc::borrow::Cow::Borrowed("ink-parachain"),
 	authoring_version: 1,
 	spec_version: 1,
 	impl_version: 0,

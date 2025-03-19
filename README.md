@@ -1,6 +1,4 @@
-# substrate-contracts-node
-
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/paritytech/substrate-contracts-node)
+# ink-node
 
 This repository contains Substrate's [`node-template`](https://github.com/paritytech/substrate/tree/master/bin/node-template)
 configured to include Substrate's [`pallet-revive`](https://github.com/paritytech/substrate/tree/master/frame/revive)
@@ -10,9 +8,9 @@ _This repository contains a couple of modifications that make it unsuitable
 for a production deployment, but a great fit for development and testing:_
 
 * The unstable features of the [`pallet-revive`](https://github.com/paritytech/substrate/tree/master/frame/contracts)
-  are enabled by default (see the [`runtime/Cargo.toml`](https://github.com/paritytech/substrate-contracts-node/blob/main/runtime/Cargo.toml)).
+  are enabled by default (see the [`runtime/Cargo.toml`](https://github.com/use-ink/ink-node/blob/main/runtime/Cargo.toml)).
 * The consensus algorithm has been switched to `manual-seal` in
-  [#42](https://github.com/paritytech/substrate-contracts-node/pull/42).
+  [#42](https://github.com/use-ink/ink-node/pull/42).
   Hereby blocks are authored immediately at every transaction, so there
   is none of the typical six seconds block time associated with `grandpa` or `aura`.
   * By default, either manual or instant seal does not result in block finalization unless the `engine_finalizeBlock` 
@@ -20,7 +18,7 @@ for a production deployment, but a great fit for development and testing:_
     amount of time by setting the `--finalize-delay-sec` option to a specific value, which specifies the number of seconds 
     to delay before finalizing the blocks. The default value is 1 second.
     ```shell
-    ./target/release/substrate-contracts-node --finalize-delay-sec 5
+    ./target/release/ink-node --finalize-delay-sec 5
     ```
 * _If no CLI arguments are passed the node is started in development mode
   by default._
@@ -31,7 +29,7 @@ for a production deployment, but a great fit for development and testing:_
   chain state you have to supply a `--base-path`._
 * For `pallet_revive::Config` we increased the allowed contract sizes. This
   avoids running into `CodeTooLarge` when uploading contracts during development.
-  See the comment in [`runtime/src/lib.rs`](https://github.com/paritytech/substrate-contracts-node/blob/main/runtime/src/lib.rs)
+  See the comment in [`runtime/src/lib.rs`](https://github.com/use-ink/ink-node/blob/main/runtime/src/lib.rs)
   for more details.
 
 If you are looking for a node suitable for production see these configurations:
@@ -44,8 +42,8 @@ If you are looking for a node suitable for production see these configurations:
 
 ### Download Binary
 
-The easiest way is to download a binary release from [our releases page](https://github.com/paritytech/substrate-contracts-node/releases)
-and just execute `./substrate-contracts-node`.
+The easiest way is to download a binary release from [our releases page](https://github.com/use-ink/ink-node/releases)
+and just execute `./ink-node`.
 
 ### Build Locally
 
@@ -54,7 +52,7 @@ Follow the [official installation steps](https://docs.substrate.io/install/) to 
 Afterwards you can install this node via
 
 ```bash
-cargo install contracts-node
+cargo install ink-node
 ```
 
 ## Usage
@@ -62,7 +60,7 @@ cargo install contracts-node
 To run a local dev node execute
 
 ```bash
-substrate-contracts-node
+ink-node
 ```
 
 A new chain in temporary directory will be created each time the command is executed. This is the
@@ -105,8 +103,8 @@ We can have two types of releases:
 - [ ] Create a PR with the changes, have it reviewed.
 - [ ] (Crate release only) Upload crates to `crates.io` using the commands below, replacing `XX` with your incremented
       version number:
-      `cargo release 0.XX.0 -v --no-tag --no-push -p contracts-node-runtime -p contracts-parachain-runtime --execute`
-      `cargo release 0.XX.0 -v --no-tag --no-push -p contracts-node --execute`
+      `cargo release 0.XX.0 -v --no-tag --no-push -p ink-node-runtime -p ink-parachain-runtime --execute`
+      `cargo release 0.XX.0 -v --no-tag --no-push -p ink-node --execute`
       Note: Before uploading, perform a dry run to ensure that it will be successful.
 - [ ] Merge the release PR branch.
 - [ ] Set the tag and run the following commands to push the tag. The tag must contain a message, otherwise the github action won't be able to create a release:
@@ -122,6 +120,6 @@ git push origin ${TAG}
 
 - [ ] After tag is pushed CI creates a GitHub draft release.
       This draft release will contain a binary for Linux and Mac and appear
-      under [Releases](https://github.com/paritytech/substrate-contracts-node/releases).
+      under [Releases](https://github.com/use-ink/ink-node/releases).
       Add a description in the style of "Synchronized with [`polkadot-v1.8.0`](https://github.com/paritytech/polkadot-sdk/tree/release-polkadot-v1.8.0) branch."
       and publish it.

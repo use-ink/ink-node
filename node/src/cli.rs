@@ -39,13 +39,13 @@ pub enum Subcommand {
 
 const AFTER_HELP_EXAMPLE: &str = color_print::cstr!(
 	r#"<bold><underline>Examples:</></>
-   <bold>parachain-contracts-node build-spec --disable-default-bootnode > plain-parachain-chainspec.json</>
+   <bold>parachain-ink-node build-spec --disable-default-bootnode > plain-parachain-chainspec.json</>
            Export a chainspec for a local testnet in json format.
-   <bold>parachain-contracts-node --chain plain-parachain-chainspec.json --tmp -- --chain rococo-local</>
+   <bold>parachain-ink-node --chain plain-parachain-chainspec.json --tmp -- --chain rococo-local</>
            Launch a full node with chain specification loaded from plain-parachain-chainspec.json.
-   <bold>parachain-contracts-node</>
+   <bold>parachain-ink-node</>
            Launch a full node with default parachain <italic>local-testnet</> and relay chain <italic>rococo-local</>.
-   <bold>parachain-contracts-node --collator</>
+   <bold>parachain-ink-node --collator</>
            Launch a collator with default parachain <italic>local-testnet</> and relay chain <italic>rococo-local</>.
  "#
 );

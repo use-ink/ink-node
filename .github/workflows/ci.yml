@@ -79,9 +79,9 @@ jobs:
           echo "######## cargo test ########"
           cargo test --release --all
           echo "######## Packing artifacts ########"
-          mkdir -p ./artifacts/substrate-contracts-node-linux/
-          cp target/release/substrate-contracts-node ./artifacts/substrate-contracts-node-linux/substrate-contracts-node
-          ls -la ./artifacts/substrate-contracts-node-linux/
+          mkdir -p ./artifacts/ink-node-linux/
+          cp target/release/ink-node ./artifacts/ink-node-linux/ink-node
+          ls -la ./artifacts/ink-node-linux/
       - name: Upload artifacts
         uses: actions/upload-artifact@v4.3.6
         with:
@@ -132,11 +132,11 @@ jobs:
           echo "######## cargo build x86_64-apple-darwin ########"
           cargo build --release --target x86_64-apple-darwin
           echo "######## Packing artifacts ########"
-          mkdir -p ./artifacts/substrate-contracts-node-mac/
-          lipo  ./target/x86_64-apple-darwin/release/substrate-contracts-node \
-                ./target/aarch64-apple-darwin/release/substrate-contracts-node  \
-                -create -output ./artifacts/substrate-contracts-node-mac/substrate-contracts-node
-          ls -la ./artifacts/substrate-contracts-node-mac/
+          mkdir -p ./artifacts/ink-node-mac/
+          lipo  ./target/x86_64-apple-darwin/release/ink-node \
+                ./target/aarch64-apple-darwin/release/ink-node  \
+                -create -output ./artifacts/ink-node-mac/ink-node
+          ls -la ./artifacts/ink-node-mac/
       - name: Upload artifacts
         uses: actions/upload-artifact@v4.3.6
         with:
@@ -158,8 +158,8 @@ jobs:
           name: build-macos
       - name: Pack artifacts
         run: |
-          tar -czvf ./substrate-contracts-node-linux.tar.gz ./substrate-contracts-node-linux
-          tar -czvf ./substrate-contracts-node-mac-universal.tar.gz ./substrate-contracts-node-mac
+          tar -czvf ./ink-node-linux.tar.gz ./ink-node-linux
+          tar -czvf ./ink-node-mac-universal.tar.gz ./ink-node-mac
           ls -la
       - name: Publish release
         uses: ghalactic/github-release-from-tag@cebdacac0ccd08933b8e7f278f4123723ad978eb # v5.4.0
@@ -168,5 +168,5 @@ jobs:
           prerelease: false
           draft: true
           assets: |
-            - path: substrate-contracts-node-linux.tar.gz
-            - path: substrate-contracts-node-mac-universal.tar.gz
+            - path: ink-node-linux.tar.gz
+            - path: ink-node-mac-universal.tar.gz
