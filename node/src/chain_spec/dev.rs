@@ -1,4 +1,4 @@
-use contracts_node_runtime::{AccountId, Signature, WASM_BINARY};
+use ink_node_runtime::{AccountId, Signature, WASM_BINARY};
 use sc_service::ChainType;
 use sp_core::{sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};

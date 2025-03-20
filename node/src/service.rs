@@ -6,7 +6,7 @@ pub mod dev;
 use std::{sync::Arc, time::Duration};
 
 // Local Runtime Types
-use contracts_parachain_runtime::{
+use ink_parachain_runtime::{
 	opaque::{Block, Hash},
 	RuntimeApi,
 };

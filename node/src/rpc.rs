@@ -7,7 +7,7 @@
 
 use std::sync::Arc;
 
-use contracts_parachain_runtime::{opaque::Block, AccountId, Balance, Nonce};
+use ink_parachain_runtime::{opaque::Block, AccountId, Balance, Nonce};
 
 use sc_transaction_pool_api::TransactionPool;
 use sp_api::ProvideRuntimeApi;

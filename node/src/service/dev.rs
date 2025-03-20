@@ -1,6 +1,6 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
-use contracts_node_runtime::{self, opaque::Block, RuntimeApi};
+use ink_node_runtime::{self, opaque::Block, RuntimeApi};
 use futures::FutureExt;
 use sc_client_api::Backend;
 use sc_service::{error::Error as ServiceError, Configuration, TaskManager};

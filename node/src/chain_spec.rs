@@ -1,6 +1,6 @@
 pub mod dev;
 
-use contracts_parachain_runtime::{AccountId, AuraId, Signature, EXISTENTIAL_DEPOSIT};
+use ink_parachain_runtime::{AccountId, AuraId, Signature, EXISTENTIAL_DEPOSIT};
 use cumulus_primitives_core::ParaId;
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::ChainType;
@@ -60,8 +60,8 @@ where
 /// Generate the session keys from individual elements.
 ///
 /// The input must be a tuple of individual keys (a single arg for now since we have just one key).
-pub fn template_session_keys(keys: AuraId) -> contracts_parachain_runtime::SessionKeys {
-	contracts_parachain_runtime::SessionKeys { aura: keys }
+pub fn template_session_keys(keys: AuraId) -> ink_parachain_runtime::SessionKeys {
+	ink_parachain_runtime::SessionKeys { aura: keys }
 }
 
 pub fn local_testnet_config() -> ChainSpec {
@@ -73,7 +73,7 @@ pub fn local_testnet_config() -> ChainSpec {
 
 	#[allow(deprecated)]
 	ChainSpec::builder(
-		contracts_parachain_runtime::WASM_BINARY
+		ink_parachain_runtime::WASM_BINARY
 			.expect("WASM binary was not built, please build it!"),
 		Extensions {
 			relay_chain: "rococo-local".into(),
