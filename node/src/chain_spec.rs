@@ -1,7 +1,7 @@
 pub mod dev;
 
-use ink_parachain_runtime::{AccountId, AuraId, Signature, EXISTENTIAL_DEPOSIT};
 use cumulus_primitives_core::ParaId;
+use ink_parachain_runtime::{AccountId, AuraId, Signature, EXISTENTIAL_DEPOSIT};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::ChainType;
 use serde::{Deserialize, Serialize};
@@ -73,8 +73,7 @@ pub fn local_testnet_config() -> ChainSpec {
 
 	#[allow(deprecated)]
 	ChainSpec::builder(
-		ink_parachain_runtime::WASM_BINARY
-			.expect("WASM binary was not built, please build it!"),
+		ink_parachain_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
 		Extensions {
 			relay_chain: "rococo-local".into(),
 			// You MUST set this to the correct network!
