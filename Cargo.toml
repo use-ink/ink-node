@@ -138,6 +138,9 @@ pallet-collator-selection = { git = "https://github.com/paritytech/polkadot-sdk"
 parachain-info = { package = "staging-parachain-info", git = "https://github.com/paritytech/polkadot-sdk", rev = "28a7ae71cc0eac747bf346804279217a68f700da", default-features = false }
 parachains-common = { git = "https://github.com/paritytech/polkadot-sdk", rev = "28a7ae71cc0eac747bf346804279217a68f700da", default-features = false }
 
+# todo Pin until https://github.com/jhpratt/deranged/issues/18 is resolved
+deranged = { version = "=0.4.0", default-features = false }
+
 # hotfix for https://github.com/paritytech/polkadot-sdk/issues/7653
 [patch.'https://github.com/w3f/fflonk']
 fflonk = { git = "https://www.github.com/w3f/fflonk", rev = "be95d4c971b1d15b5badfc06ff13f5c07987d484" }
