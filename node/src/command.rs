@@ -24,7 +24,7 @@ fn load_spec(id: &str) -> std::result::Result<Box<dyn ChainSpec>, String> {
 
 impl SubstrateCli for Cli {
 	fn impl_name() -> String {
-		"Substrate Contracts Node".into()
+		"ink! node".into()
 	}
 
 	fn impl_version() -> String {
@@ -54,7 +54,7 @@ impl SubstrateCli for Cli {
 
 impl SubstrateCli for RelayChainCli {
 	fn impl_name() -> String {
-		"Substrate Contracts Node".into()
+		"ink! node".into()
 	}
 
 	fn impl_version() -> String {

@@ -87,6 +87,7 @@ jobs:
         with:
           name: build-linux
           path: ./artifacts
+
   build-macos:
     timeout-minutes: 240
     runs-on: macos-latest
@@ -142,6 +143,7 @@ jobs:
         with:
           name: build-macos
           path: ./artifacts
+
   publish:
     name: Publish release
     runs-on: ubuntu-latest

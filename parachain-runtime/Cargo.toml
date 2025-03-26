@@ -79,9 +79,13 @@ pallet-utility = { workspace = true }
 pallet-insecure-randomness-collective-flip = { workspace = true }
 pallet-assets = { workspace = true }
 
+# todo Pin until https://github.com/jhpratt/deranged/issues/18 is resolved
+deranged = { version = "=0.4.0", default-features = false }
+
 [features]
 default = ["std"]
 std = [
+	"deranged/std",
 	"codec/std",
 	"cumulus-pallet-aura-ext/std",
 	"cumulus-pallet-dmp-queue/std",

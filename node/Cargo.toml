@@ -89,11 +89,15 @@ cumulus-primitives-parachain-inherent = { workspace = true }
 cumulus-relay-chain-interface = { workspace = true }
 color-print = { workspace = true }
 
+# todo Pin until https://github.com/jhpratt/deranged/issues/18 is resolved
+deranged = { version = "=0.4.0", default-features = false }
+
 [build-dependencies]
 substrate-build-script-utils = { workspace = true }
 
 [features]
 default = []
+std = ["deranged/std"]
 runtime-benchmarks = [
 	"ink-parachain-runtime/runtime-benchmarks",
 	"polkadot-cli/runtime-benchmarks",
