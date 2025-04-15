@@ -16,7 +16,7 @@ concurrency:
 # common variable is defined in the workflow
 # repo env variable doesn't work for PR from forks
 env:
-  CI_IMAGE: "paritytech/ci-unified:bullseye-1.81.0"
+  CI_IMAGE: "paritytech/ci-unified:bullseye-1.84.1-2025-01-28"
 
 jobs:
   set-image:
@@ -61,6 +61,9 @@ jobs:
       image: ${{ needs.set-image.outputs.CI_IMAGE }}
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - name: Clone polkadot-sdk
+        run: |
+          git clone --depth 1 --branch polkadot-stable2503 https://github.com/paritytech/polkadot-sdk.git
       - name: Rust Cache
         uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
         with:
@@ -78,9 +81,14 @@ jobs:
           cargo build --release
           echo "######## cargo test ########"
           cargo test --release --all
+          echo "######## Building eth-rpc ########"
+          cd polkadot-sdk
+          cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc
+          cd ..
           echo "######## Packing artifacts ########"
           mkdir -p ./artifacts/ink-node-linux/
           cp target/release/ink-node ./artifacts/ink-node-linux/ink-node
+          cp polkadot-sdk/target/production/eth-rpc ./artifacts/ink-node-linux/eth-rpc
           ls -la ./artifacts/ink-node-linux/
       - name: Upload artifacts
         uses: actions/upload-artifact@v4.3.6
@@ -98,6 +106,9 @@ jobs:
         os: ["macos-latest"]
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - name: Clone polkadot-sdk
+        run: |
+          git clone --depth 1 --branch polkadot-stable2503 https://github.com/paritytech/polkadot-sdk.git
       - name: Set rust version from env file
         run: |
           echo $CI_IMAGE
@@ -132,11 +143,20 @@ jobs:
           cargo build --release --target aarch64-apple-darwin
           echo "######## cargo build x86_64-apple-darwin ########"
           cargo build --release --target x86_64-apple-darwin
+          echo "######## cargo build aarch64-apple-darwin eth-rpc ########"
+          cd polkadot-sdk
+          cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc --target aarch64-apple-darwin
+          echo "######## cargo build x86_64-apple-darwin eth-rpc ########"
+          cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc --target x86_64-apple-darwin
+          cd ..
           echo "######## Packing artifacts ########"
           mkdir -p ./artifacts/ink-node-mac/
           lipo  ./target/x86_64-apple-darwin/release/ink-node \
                 ./target/aarch64-apple-darwin/release/ink-node  \
                 -create -output ./artifacts/ink-node-mac/ink-node
+          lipo  ./polkadot-sdk/target/x86_64-apple-darwin/production/eth-rpc \
+                ./polkadot-sdk/target/aarch64-apple-darwin/production/eth-rpc \
+                -create -output ./artifacts/ink-node-mac/eth-rpc
           ls -la ./artifacts/ink-node-mac/
       - name: Upload artifacts
         uses: actions/upload-artifact@v4.3.6
