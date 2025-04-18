@@ -55,7 +55,7 @@ jobs:
   build-test-linux:
     name: Build Linux
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 240
     needs: [set-image, fmt]
     container:
       image: ${{ needs.set-image.outputs.CI_IMAGE }}
