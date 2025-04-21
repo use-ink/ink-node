@@ -5567,7 +5567,7 @@ dependencies = [
 
 [[package]]
 name = "ink-node"
-version = "0.43.1"
+version = "0.43.2"
 dependencies = [
  "clap",
  "color-print",
@@ -5634,7 +5634,7 @@ dependencies = [
 
 [[package]]
 name = "ink-node-runtime"
-version = "0.43.1"
+version = "0.43.2"
 dependencies = [
  "deranged",
  "frame-benchmarking",
@@ -5678,7 +5678,7 @@ dependencies = [
 
 [[package]]
 name = "ink-parachain-runtime"
-version = "0.43.1"
+version = "0.43.2"
 dependencies = [
  "cumulus-pallet-aura-ext",
  "cumulus-pallet-dmp-queue",
