@@ -102,10 +102,13 @@ We can have two types of releases:
       and a new, up to date, `Cargo.lock` will be created.
 - [ ] Create a PR with the changes, have it reviewed.
 - [ ] (Crate release only) Upload crates to `crates.io` using the commands below, replacing `XX` with your incremented
-      version number:
-      `cargo release 0.XX.0 -v --no-tag --no-push -p ink-node-runtime -p ink-parachain-runtime --execute`
-      `cargo release 0.XX.0 -v --no-tag --no-push -p ink-node --execute`
-      Note: Before uploading, perform a dry run to ensure that it will be successful.
+  version number:
+  `cargo release 0.XX.0 -v --no-tag --no-push -p ink-node-runtime -p ink-parachain-runtime --execute`
+  Note: Before uploading, perform a dry run to ensure that it will be successful.
+- [ ] (Create release only) Upload the runtime dependencies in `ink-node` such that they depend on the published versions.
+  Then, release `ink-node`:
+  `cargo release 0.XX.0 -v --no-tag --no-push -p ink-node --execute`
+  Note: Before uploading, perform a dry run to ensure that it will be successful.
 - [ ] Merge the release PR branch.
 - [ ] Set the tag and run the following commands to push the tag. The tag must contain a message, otherwise the github action won't be able to create a release:
   
