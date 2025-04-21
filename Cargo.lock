@@ -5567,7 +5567,7 @@ dependencies = [
 
 [[package]]
 name = "ink-node"
-version = "0.43.1"
+version = "0.43.2"
 dependencies = [
  "clap",
  "color-print",
@@ -5584,8 +5584,8 @@ dependencies = [
  "frame-benchmarking",
  "frame-benchmarking-cli",
  "futures",
- "ink-node-runtime",
- "ink-parachain-runtime",
+ "ink-node-runtime 0.43.1",
+ "ink-parachain-runtime 0.43.1",
  "jsonrpsee 0.24.9",
  "log",
  "pallet-transaction-payment-rpc",
@@ -5635,6 +5635,52 @@ dependencies = [
 [[package]]
 name = "ink-node-runtime"
 version = "0.43.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "61b0cf9a00e9231658ecad13892c3e45674d8a8f2242b8ebbbdab89f783317ce"
+dependencies = [
+ "deranged",
+ "frame-benchmarking",
+ "frame-executive",
+ "frame-support 40.1.0",
+ "frame-system",
+ "frame-system-benchmarking",
+ "frame-system-rpc-runtime-api",
+ "frame-try-runtime 0.46.0",
+ "log",
+ "pallet-assets",
+ "pallet-aura",
+ "pallet-authorship",
+ "pallet-balances",
+ "pallet-grandpa",
+ "pallet-insecure-randomness-collective-flip",
+ "pallet-revive",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
+ "pallet-transaction-payment-rpc-runtime-api",
+ "pallet-utility",
+ "parity-scale-codec",
+ "polkadot-runtime-common",
+ "scale-info",
+ "sp-api 36.0.1",
+ "sp-block-builder 36.0.0",
+ "sp-consensus-aura 0.42.0",
+ "sp-consensus-grandpa 23.1.0",
+ "sp-core 36.1.0",
+ "sp-genesis-builder 0.17.0",
+ "sp-inherents 36.0.0",
+ "sp-offchain 36.0.0",
+ "sp-runtime 41.1.0",
+ "sp-session 38.1.0",
+ "sp-storage 22.0.0",
+ "sp-transaction-pool 36.0.0",
+ "sp-version 39.0.0",
+ "substrate-wasm-builder",
+]
+
+[[package]]
+name = "ink-node-runtime"
+version = "0.43.2"
 dependencies = [
  "deranged",
  "frame-benchmarking",
@@ -5679,6 +5725,72 @@ dependencies = [
 [[package]]
 name = "ink-parachain-runtime"
 version = "0.43.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b359fc63e8e5d26aa0e79d4d9aa6f3d6638b8e2258586f62936fe21c4c526e2"
+dependencies = [
+ "cumulus-pallet-aura-ext",
+ "cumulus-pallet-dmp-queue",
+ "cumulus-pallet-parachain-system",
+ "cumulus-pallet-session-benchmarking",
+ "cumulus-pallet-xcm",
+ "cumulus-pallet-xcmp-queue",
+ "cumulus-primitives-aura",
+ "cumulus-primitives-core",
+ "cumulus-primitives-timestamp",
+ "cumulus-primitives-utility",
+ "deranged",
+ "frame-benchmarking",
+ "frame-executive",
+ "frame-support 40.1.0",
+ "frame-system",
+ "frame-system-benchmarking",
+ "frame-system-rpc-runtime-api",
+ "frame-try-runtime 0.46.0",
+ "hex-literal",
+ "log",
+ "pallet-assets",
+ "pallet-aura",
+ "pallet-authorship",
+ "pallet-balances",
+ "pallet-collator-selection",
+ "pallet-insecure-randomness-collective-flip",
+ "pallet-message-queue",
+ "pallet-revive",
+ "pallet-session",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
+ "pallet-transaction-payment-rpc-runtime-api",
+ "pallet-utility",
+ "pallet-xcm",
+ "parachains-common",
+ "parity-scale-codec",
+ "polkadot-parachain-primitives",
+ "polkadot-runtime-common",
+ "scale-info",
+ "smallvec",
+ "sp-api 36.0.1",
+ "sp-block-builder 36.0.0",
+ "sp-consensus-aura 0.42.0",
+ "sp-core 36.1.0",
+ "sp-genesis-builder 0.17.0",
+ "sp-inherents 36.0.0",
+ "sp-offchain 36.0.0",
+ "sp-runtime 41.1.0",
+ "sp-session 38.1.0",
+ "sp-std",
+ "sp-transaction-pool 36.0.0",
+ "sp-version 39.0.0",
+ "staging-parachain-info",
+ "staging-xcm",
+ "staging-xcm-builder",
+ "staging-xcm-executor",
+ "substrate-wasm-builder",
+]
+
+[[package]]
+name = "ink-parachain-runtime"
+version = "0.43.2"
 dependencies = [
  "cumulus-pallet-aura-ext",
  "cumulus-pallet-dmp-queue",
@@ -20435,8 +20547,3 @@ dependencies = [
  "cc",
  "pkg-config",
 ]
-
-[[patch.unused]]
-name = "fflonk"
-version = "0.1.1"
-source = "git+https://www.github.com/w3f/fflonk?rev=be95d4c971b1d15b5badfc06ff13f5c07987d484#be95d4c971b1d15b5badfc06ff13f5c07987d484"

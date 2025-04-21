@@ -1,7 +1,7 @@
 [workspace.package]
 authors = ["Use Ink <ink@use.ink>"]
 edition = "2021"
-version = "0.43.1"
+version = "0.43.2"
 license = "Unlicense"
 homepage = "https://use.ink"
 repository = "https://github.com/use-ink/ink-node"
@@ -138,9 +138,9 @@ pallet-collator-selection = { version = "21.0.0", default-features = false }
 parachain-info = { version = "0.20.0", package = "staging-parachain-info", default-features = false }
 parachains-common = { version = "21.0.0", default-features = false }
 
-# todo Pin until https://github.com/jhpratt/deranged/issues/18 is resolved
+# todo Pin until whttps://github.com/jhpratt/deranged/issues/18 is resolved
 deranged = { version = "=0.4.0", default-features = false }
 
 # hotfix for https://github.com/paritytech/polkadot-sdk/issues/7653
-[patch.'https://github.com/w3f/fflonk']
-fflonk = { git = "https://www.github.com/w3f/fflonk", rev = "be95d4c971b1d15b5badfc06ff13f5c07987d484" }
+# [patch.'https://github.com/w3f/fflonk']
+# fflonk = { git = "https://www.github.com/w3f/fflonk", rev = "be95d4c971b1d15b5badfc06ff13f5c07987d484" }
