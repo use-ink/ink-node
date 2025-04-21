@@ -27,10 +27,8 @@ serde_json = { workspace = true }
 wasmtime = { workspace = true }
 
 # Local
-ink-parachain-runtime = { path = "../parachain-runtime", features = [
-  "parachain",
-], version = "0.43.0" }
-ink-node-runtime = { path = "../runtime", version = "0.43.0" }
+ink-parachain-runtime = { features = ["parachain"], version = "0.43.1" }
+ink-node-runtime = { version = "0.43.1" }
 
 # Substrate
 frame-benchmarking = { workspace = true }
@@ -99,10 +97,10 @@ substrate-build-script-utils = { workspace = true }
 default = []
 std = ["deranged/std"]
 runtime-benchmarks = [
-	"ink-parachain-runtime/runtime-benchmarks",
-	"polkadot-cli/runtime-benchmarks",
+  "ink-parachain-runtime/runtime-benchmarks",
+  "polkadot-cli/runtime-benchmarks",
 ]
 try-runtime = [
-	"try-runtime-cli/try-runtime",
-	"ink-parachain-runtime/try-runtime",
+  "try-runtime-cli/try-runtime",
+  "ink-parachain-runtime/try-runtime",
 ]
