@@ -26,7 +26,7 @@ futures = { workspace = true }
 serde_json = { workspace = true }
 wasmtime = { workspace = true }
 
-# Local
+# ink-node runtimes
 ink-parachain-runtime = { features = ["parachain"], version = "0.43.1" }
 ink-node-runtime = { version = "0.43.1" }
 
