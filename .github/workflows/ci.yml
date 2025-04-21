@@ -96,6 +96,55 @@ jobs:
           name: build-linux
           path: ./artifacts
 
+  build-linux-arm64:
+    name: Build Linux ARM64
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    needs: [ set-image, fmt ]
+    container:
+      image: ${{ needs.set-image.outputs.CI_IMAGE }}
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - name: Install ARM64 toolchain
+        run: |
+          rustup target add aarch64-unknown-linux-gnu
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+      - name: Clone polkadot-sdk
+        run: |
+          git clone --depth 1 --branch polkadot-stable2503 https://github.com/paritytech/polkadot-sdk.git
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
+        with:
+          cache-on-failure: true
+          cache-all-crates: true
+      - name: cargo info
+        run: |
+          echo "######## rustup show ########"
+          rustup show
+          echo "######## cargo --version ########"
+          cargo --version
+      - name: Build and Test Linux ARM64
+        env:
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
+        run: |
+          echo "######## cargo build ########"
+          cargo build --release --target aarch64-unknown-linux-gnu
+          echo "######## Building eth-rpc ########"
+          cd polkadot-sdk
+          cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc --target aarch64-unknown-linux-gnu
+          cd ..
+          echo "######## Packing artifacts ########"
+          mkdir -p ./artifacts/ink-node-linux-arm64/
+          cp target/aarch64-unknown-linux-gnu/release/ink-node ./artifacts/ink-node-linux-arm64/ink-node
+          cp polkadot-sdk/target/aarch64-unknown-linux-gnu/production/eth-rpc ./artifacts/ink-node-linux-arm64/eth-rpc
+          ls -la ./artifacts/ink-node-linux-arm64/
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4.3.6
+        with:
+          name: build-linux-arm64
+          path: ./artifacts
+
   build-macos:
     timeout-minutes: 240
     runs-on: macos-latest
@@ -167,7 +216,7 @@ jobs:
   publish:
     name: Publish release
     runs-on: ubuntu-latest
-    needs: [build-test-linux, build-macos]
+    needs: [ build-test-linux, build-macos, build-linux-arm64 ]
     permissions:
       contents: write
     steps:
@@ -178,10 +227,14 @@ jobs:
       - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           name: build-macos
+      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: build-linux-arm64
       - name: Pack artifacts
         run: |
           tar -czvf ./ink-node-linux.tar.gz ./ink-node-linux
           tar -czvf ./ink-node-mac-universal.tar.gz ./ink-node-mac
+          tar -czvf ./ink-node-linux-arm64.tar.gz ./ink-node-linux-arm64
           ls -la
       - name: Publish release
         uses: ghalactic/github-release-from-tag@cebdacac0ccd08933b8e7f278f4123723ad978eb # v5.4.0
@@ -192,3 +245,4 @@ jobs:
           assets: |
             - path: ink-node-linux.tar.gz
             - path: ink-node-mac-universal.tar.gz
+            - path: ink-node-linux-arm64.tar.gz

@@ -29,8 +29,8 @@ wasmtime = { workspace = true }
 # Local
 ink-parachain-runtime = { path = "../parachain-runtime", features = [
   "parachain",
-], version = "0.43.0" }
-ink-node-runtime = { path = "../runtime", version = "0.43.0" }
+], version = "0.43.2" }
+ink-node-runtime = { path = "../runtime", version = "0.43.2" }
 
 # Substrate
 frame-benchmarking = { workspace = true }
