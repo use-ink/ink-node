@@ -1,13 +1,11 @@
 use crate::{
-	Balance, Balances, Perbill, Runtime, RuntimeCall, RuntimeEvent,
-	RuntimeHoldReason, Timestamp,
+	Balance, Balances, Perbill, Runtime, RuntimeCall, RuntimeEvent, RuntimeHoldReason, Timestamp,
 };
 use frame_support::{
 	parameter_types,
 	traits::{ConstBool, ConstU32, ConstU64},
 };
 use frame_system::EnsureSigned;
-
 
 // Unit = the base number of indivisible units for balances
 const UNIT: Balance = 1_000_000_000_000;

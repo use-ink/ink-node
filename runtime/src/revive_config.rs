@@ -1,6 +1,5 @@
 use crate::{
-	Balance, Balances, Perbill, Runtime, RuntimeCall, RuntimeEvent,
-	RuntimeHoldReason, Timestamp,
+	Balance, Balances, Perbill, Runtime, RuntimeCall, RuntimeEvent, RuntimeHoldReason, Timestamp,
 };
 use frame_support::{
 	parameter_types,
