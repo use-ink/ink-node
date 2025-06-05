@@ -1,5 +1,5 @@
 use crate::{
-	Balance, Balances, BalancesCall, Perbill, Runtime, RuntimeCall, RuntimeEvent,
+	Balance, Balances, Perbill, Runtime, RuntimeCall, RuntimeEvent,
 	RuntimeHoldReason, Timestamp,
 };
 use frame_support::{
@@ -7,14 +7,6 @@ use frame_support::{
 	traits::{ConstBool, ConstU32, ConstU64},
 };
 use frame_system::EnsureSigned;
-
-pub enum AllowBalancesCall {}
-
-impl frame_support::traits::Contains<RuntimeCall> for AllowBalancesCall {
-	fn contains(call: &RuntimeCall) -> bool {
-		matches!(call, RuntimeCall::Balances(BalancesCall::transfer_allow_death { .. }))
-	}
-}
 
 // Unit = the base number of indivisible units for balances
 const UNIT: Balance = 1_000_000_000_000;
@@ -37,28 +29,17 @@ impl pallet_revive::Config for Runtime {
 	type Currency = Balances;
 	type RuntimeEvent = RuntimeEvent;
 	type RuntimeCall = RuntimeCall;
-	/// The safest default is to allow no calls at all.
-	///
-	/// Runtimes should whitelist dispatchables that are allowed to be called from contracts
-	/// and make sure they are stable. Dispatchables exposed to contracts are not allowed to
-	/// change because that would break already deployed contracts. The `RuntimeCall` structure
-	/// itself is not allowed to change the indices of existing pallets, too.
-	type CallFilter = AllowBalancesCall;
 	type DepositPerItem = DepositPerItem;
 	type DepositPerByte = DepositPerByte;
 	type WeightPrice = pallet_transaction_payment::Pallet<Self>;
 	type WeightInfo = pallet_revive::weights::SubstrateWeight<Self>;
-	type ChainExtension = ();
+	type Precompiles = ();
 	type AddressMapper = pallet_revive::AccountId32Mapper<Self>;
 	type RuntimeMemory = ConstU32<{ 128 * 1024 * 1024 }>;
 	type PVFMemory = ConstU32<{ 512 * 1024 * 1024 }>;
 	type UnsafeUnstableInterface = ConstBool<true>;
 	type CodeHashLockupDepositPercent = CodeHashLockupDepositPercent;
 	type RuntimeHoldReason = RuntimeHoldReason;
-	#[cfg(feature = "parachain")]
-	type Xcm = pallet_xcm::Pallet<Self>;
-	#[cfg(not(feature = "parachain"))]
-	type Xcm = ();
 	type UploadOrigin = EnsureSigned<Self::AccountId>;
 	type InstantiateOrigin = EnsureSigned<Self::AccountId>;
 	type ChainId = ConstU64<420_420_420>;

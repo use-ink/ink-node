@@ -417,6 +417,7 @@ impl cumulus_pallet_parachain_system::Config for Runtime {
 	type CheckAssociatedRelayNumber = RelayNumberStrictlyIncreases;
 	type ConsensusHook = ConsensusHook;
 	type SelectCore = cumulus_pallet_parachain_system::DefaultCoreSelector<Runtime>;
+	type RelayParentOffset = ConstU32<0>;
 }
 
 impl parachain_info::Config for Runtime {}
@@ -888,7 +889,7 @@ impl_runtime_apis! {
 				)
 			};
 
-			Revive::bare_eth_transact(tx, blockweights.max_block, tx_fee)
+			Revive::dry_run_eth_transact(tx, blockweights.max_block, tx_fee)
 		}
 
 		fn call(
@@ -948,6 +949,16 @@ impl_runtime_apis! {
 			key: [u8; 32],
 		) -> pallet_revive::GetStorageResult {
 			Revive::get_storage(
+				address,
+				key
+			)
+		}
+
+		fn get_storage_var_key(
+			address: H160,
+			key: Vec<u8>,
+		) -> pallet_revive::GetStorageResult {
+			Revive::get_storage_var_key(
 				address,
 				key
 			)
