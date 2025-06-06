@@ -531,7 +531,7 @@ impl_runtime_apis! {
 				)
 			};
 
-			Revive::bare_eth_transact(tx, blockweights.max_block, tx_fee)
+			Revive::dry_run_eth_transact(tx, blockweights.max_block, tx_fee)
 		}
 
 		fn call(
@@ -596,22 +596,32 @@ impl_runtime_apis! {
 			)
 		}
 
+		fn get_storage_var_key(
+			address: H160,
+			key: Vec<u8>,
+		) -> pallet_revive::GetStorageResult {
+			Revive::get_storage_var_key(
+				address,
+				key
+			)
+		}
+
 		fn trace_block(
 			block: Block,
-			config: pallet_revive::evm::TracerConfig
-		) -> Vec<(u32, pallet_revive::evm::CallTrace)> {
+			tracer_type: pallet_revive::evm::TracerType
+		) -> Vec<(u32, pallet_revive::evm::Trace)> {
 			use pallet_revive::tracing::trace;
-			let mut tracer = config.build(Revive::evm_gas_from_weight);
+			let mut tracer = Revive::evm_tracer(tracer_type);
 			let mut traces = vec![];
 			let (header, extrinsics) = block.deconstruct();
 
 			Executive::initialize_block(&header);
 			for (index, ext) in extrinsics.into_iter().enumerate() {
-				trace(&mut tracer, || {
+				trace(tracer.as_tracing(), || {
 					let _ = Executive::apply_extrinsic(ext);
 				});
 
-				if let Some(tx_trace) = tracer.collect_traces().pop() {
+				if let Some(tx_trace) = tracer.collect_trace() {
 					traces.push((index as u32, tx_trace));
 				}
 			}
@@ -622,11 +632,11 @@ impl_runtime_apis! {
 		fn trace_tx(
 			block: Block,
 			tx_index: u32,
-			config: pallet_revive::evm::TracerConfig
-		) -> Option<pallet_revive::evm::CallTrace> {
+			tracer_type: pallet_revive::evm::TracerType
+		) -> Option<pallet_revive::evm::Trace> {
 			log::info!("-----trace_tx called with tx_index {:?}", tx_index);
 			use pallet_revive::tracing::trace;
-			let mut tracer = config.build(Revive::evm_gas_from_weight);
+			let mut tracer = Revive::evm_tracer(tracer_type);
 			let (header, extrinsics) = block.deconstruct();
 
 			log::info!("-----trace_tx found {:?} xts", extrinsics.len());
@@ -636,7 +646,7 @@ impl_runtime_apis! {
 				log::info!("-----trace_tx enumerating {:?}", index);
 				if index as u32 == tx_index {
 					log::info!("-----trace_tx found tx_index {:?}", tx_index);
-					trace(&mut tracer, || {
+					trace(tracer.as_tracing(), || {
 						log::info!("-----trace_tx applying extrinsic");
 						let res = Executive::apply_extrinsic(ext);
 						log::info!("-----trace_tx after applying extrinsic {:?}", res);
@@ -650,29 +660,23 @@ impl_runtime_apis! {
 				}
 			}
 			log::info!("-----trace_tx after loop");
-
-			let mut traces = tracer.collect_traces();
-			log::info!("-----trace_tx traces.len() {:?}", traces.len());
-			log::info!("-----trace_tx traces {:?}", traces);
-
-			let traces = traces.pop();
-			log::info!("-----trace_tx traces popped {:?}", traces);
-
-			traces
+			let trace = tracer.collect_trace();
+			log::info!("-----trace_tx trace {:?}", trace);
+			trace
 		}
 
 		fn trace_call(
 			tx: pallet_revive::evm::GenericTransaction,
-			config: pallet_revive::evm::TracerConfig)
-			-> Result<pallet_revive::evm::CallTrace, pallet_revive::EthTransactError>
+			tracer_type: pallet_revive::evm::TracerType)
+			-> Result<pallet_revive::evm::Trace, pallet_revive::EthTransactError>
 		{
 			use pallet_revive::tracing::trace;
-			let mut tracer = config.build(Revive::evm_gas_from_weight);
-			trace(&mut tracer, || {
+			let mut tracer = Revive::evm_tracer(tracer_type);
+			trace(tracer.as_tracing(), || {
 				Self::eth_transact(tx)
 			})?;
 
-			Ok(tracer.collect_traces().pop().expect("eth_transact succeeded, trace must exist, qed"))
+			Ok(tracer.collect_trace().expect("eth_transact succeeded, trace must exist, qed"))
 		}
 	}
 
