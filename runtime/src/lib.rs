@@ -672,11 +672,17 @@ impl_runtime_apis! {
 		{
 			use pallet_revive::tracing::trace;
 			let mut tracer = Revive::evm_tracer(tracer_type);
-			trace(tracer.as_tracing(), || {
+			let result = trace(tracer.as_tracing(), || {
 				Self::eth_transact(tx)
-			})?;
+			});
 
-			Ok(tracer.collect_trace().expect("eth_transact succeeded, trace must exist, qed"))
+			if let Some(trace) = tracer.collect_trace() {
+				Ok(trace)
+			} else if let Err(err) = result {
+				Err(err)
+			} else {
+				Ok(tracer.empty_trace())
+			}
 		}
 	}
 
