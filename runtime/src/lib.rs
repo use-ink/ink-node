@@ -11,7 +11,6 @@ mod revive_config;
 
 extern crate alloc;
 use alloc::{vec, vec::Vec};
-use codec::Encode;
 use frame_support::{
 	derive_impl,
 	dispatch::DispatchClass,
@@ -33,7 +32,6 @@ use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 
 // A few exports that help ease life for downstream crates.
-use frame_support::dispatch::DispatchInfo;
 pub use frame_support::{
 	construct_runtime, parameter_types,
 	traits::{
@@ -52,7 +50,6 @@ pub use frame_system::Call as SystemCall;
 pub use pallet_balances::Call as BalancesCall;
 pub use pallet_timestamp::Call as TimestampCall;
 use pallet_transaction_payment::{FeeDetails, FungibleAdapter, RuntimeDispatchInfo};
-use sp_runtime::traits::TransactionExtension;
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
@@ -502,12 +499,15 @@ impl_runtime_apis! {
 			Revive::evm_balance(&address)
 		}
 
+		fn block_author() -> Option<H160> {
+			Revive::block_author()
+		}
+
 		fn block_gas_limit() -> U256 {
 			Revive::evm_block_gas_limit()
 		}
 
 		fn gas_price() -> U256 {
-			log::info!("-----gas price");
 			Revive::evm_gas_price()
 		}
 
@@ -516,14 +516,32 @@ impl_runtime_apis! {
 			System::account_nonce(account)
 		}
 
+		fn address(account_id: AccountId) -> H160 {
+			use pallet_revive::AddressMapper;
+			<Runtime as pallet_revive::Config>::AddressMapper::to_address(&account_id)
+		}
+
 		fn eth_transact(tx: pallet_revive::evm::GenericTransaction) -> Result<pallet_revive::EthTransactInfo<Balance>, pallet_revive::EthTransactError>
 		{
-			let blockweights: BlockWeights = <Runtime as frame_system::Config>::BlockWeights::get();
-			let tx_fee = |pallet_call, mut dispatch_info: DispatchInfo| {
-				let call = RuntimeCall::Revive(pallet_call);
-				dispatch_info.extension_weight = EthExtraImpl::get_eth_extension(0, 0u32.into()).weight(&call);
-				let uxt: UncheckedExtrinsic = sp_runtime::generic::UncheckedExtrinsic::new_bare(call).into();
+			use pallet_revive::{
+				codec::Encode, evm::runtime::EthExtra,
+				sp_runtime::traits::TransactionExtension,
+				sp_runtime::traits::Block as BlockT
+			};
 
+			let tx_fee = |call: <Runtime as frame_system::Config>::RuntimeCall, dispatch_call: <Runtime as frame_system::Config>::RuntimeCall| {
+				use frame_support::dispatch::GetDispatchInfo;
+
+				// Get the dispatch info of the actual call dispatched
+				let mut dispatch_info = dispatch_call.get_dispatch_info();
+				dispatch_info.extension_weight =
+					EthExtraImpl::get_eth_extension(0, 0u32.into()).weight(&dispatch_call);
+
+				// Build the extrinsic
+				let uxt: <Block as BlockT>::Extrinsic =
+					sp_runtime::generic::UncheckedExtrinsic::new_bare(call).into();
+
+				// Compute the fee of the extrinsic
 				pallet_transaction_payment::Pallet::<Runtime>::compute_fee(
 					uxt.encoded_size() as u32,
 					&dispatch_info,
@@ -531,6 +549,8 @@ impl_runtime_apis! {
 				)
 			};
 
+			let blockweights: BlockWeights =
+				<Runtime as frame_system::Config>::BlockWeights::get();
 			Revive::dry_run_eth_transact(tx, blockweights.max_block, tx_fee)
 		}
 
@@ -570,6 +590,7 @@ impl_runtime_apis! {
 				code,
 				data,
 				salt,
+				pallet_revive::BumpNonce::Yes,
 			)
 		}
 
@@ -634,34 +655,22 @@ impl_runtime_apis! {
 			tx_index: u32,
 			tracer_type: pallet_revive::evm::TracerType
 		) -> Option<pallet_revive::evm::Trace> {
-			log::info!("-----trace_tx called with tx_index {:?}", tx_index);
 			use pallet_revive::tracing::trace;
 			let mut tracer = Revive::evm_tracer(tracer_type);
 			let (header, extrinsics) = block.deconstruct();
 
-			log::info!("-----trace_tx found {:?} xts", extrinsics.len());
 			Executive::initialize_block(&header);
-			log::info!("-----trace_tx initialized block");
 			for (index, ext) in extrinsics.into_iter().enumerate() {
-				log::info!("-----trace_tx enumerating {:?}", index);
 				if index as u32 == tx_index {
-					log::info!("-----trace_tx found tx_index {:?}", tx_index);
 					trace(tracer.as_tracing(), || {
-						log::info!("-----trace_tx applying extrinsic");
-						let res = Executive::apply_extrinsic(ext);
-						log::info!("-----trace_tx after applying extrinsic {:?}", res);
+						let _ = Executive::apply_extrinsic(ext);
 					});
-						log::info!("-----trace_tx break");
 					break;
 				} else {
-						log::info!("-----trace_tx apply extrinsic without tx_index match");
-					let res = Executive::apply_extrinsic(ext);
-						log::info!("-----trace_tx apply extrinsic without tx_index match {:?}", res);
+					let _ = Executive::apply_extrinsic(ext);
 				}
 			}
-			log::info!("-----trace_tx after loop");
 			let trace = tracer.collect_trace();
-			log::info!("-----trace_tx trace {:?}", trace);
 			trace
 		}
 
@@ -683,6 +692,14 @@ impl_runtime_apis! {
 			} else {
 				Ok(tracer.empty_trace())
 			}
+		}
+
+		fn runtime_pallets_address() -> H160 {
+			pallet_revive::RUNTIME_PALLETS_ADDR
+		}
+
+		fn code(address: H160) -> Vec<u8> {
+			Revive::code(&address)
 		}
 	}
 
