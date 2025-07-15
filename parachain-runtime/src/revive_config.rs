@@ -6,6 +6,7 @@ use frame_support::{
 	traits::{ConstBool, ConstU32, ConstU64},
 };
 use frame_system::EnsureSigned;
+use pallet_assets::precompiles::{InlineIdConfig, ERC20};
 use pallet_xcm::precompiles::XcmPrecompile;
 
 // Unit = the base number of indivisible units for balances
@@ -45,5 +46,5 @@ impl pallet_revive::Config for Runtime {
 	type NativeToEthRatio = ConstU32<100_000_000>; // 10^(18 - 10) Eth is 10^18, Native is 10^10.
 	type EthGasEncoder = ();
 	type FindAuthor = <Runtime as pallet_authorship::Config>::FindAuthor;
-	type Precompiles = (XcmPrecompile<Self>,);
+	type Precompiles = (XcmPrecompile<Self>, ERC20<Self, InlineIdConfig<0x120>, ()>);
 }
