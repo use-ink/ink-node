@@ -17,9 +17,9 @@
 # - The latest matching rule, if multiple, takes precedence.
 
 # Global code owners
-* @cmichi @athei @ascjones @agryaznov @SkymanOne
+* @cmichi @davidsemakula @AlexD10S
 
 # CI
-/.github/ @paritytech/ci @cmichi @ascjones @athei @agryaznov @SkymanOne
-/scripts/ci/ @paritytech/ci @cmichi @ascjones @athei @agryaznov @SkymanOne
-/.gitlab-ci.yml @paritytech/ci @cmichi @ascjones @athei @agryaznov @SkymanOne
+/.github/ @cmichi @davidsemakula @AlexD10S
+/scripts/ci/ @cmichi @davidsemakula @AlexD10S
+/.gitlab-ci.yml @cmichi @davidsemakula @AlexD10S
