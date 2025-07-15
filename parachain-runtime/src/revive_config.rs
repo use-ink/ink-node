@@ -6,7 +6,7 @@ use frame_support::{
 	traits::{ConstBool, ConstU32, ConstU64},
 };
 use frame_system::EnsureSigned;
-use pallet_xcm::{precompiles::XcmPrecompile};
+use pallet_xcm::precompiles::XcmPrecompile;
 
 // Unit = the base number of indivisible units for balances
 const UNIT: Balance = 1_000_000_000_000;
