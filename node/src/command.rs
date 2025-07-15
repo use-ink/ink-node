@@ -227,6 +227,7 @@ pub fn run() -> Result<()> {
 						config,
 						cli.finalize_delay_sec.into(),
 					)
+					.await
 					.map_err(sc_cli::Error::Service);
 				}
 
