@@ -4,7 +4,7 @@ use std::path::Path;
 
 use frame_support::{assert_ok, weights::Weight};
 use ink_parachain_runtime::{
-	AccountId, Assets, Balance, Revive, Runtime, RuntimeOrigin, System, UNIT,
+	AccountId, Assets, Balance, Balances, Revive, Runtime, RuntimeOrigin, System, UNIT,
 };
 use pallet_assets::{Instance1, NextAssetId};
 use pallet_revive::{

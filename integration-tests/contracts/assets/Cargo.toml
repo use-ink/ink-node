@@ -6,7 +6,7 @@ version = "0.1.0"
 
 # ink! abi required for multiple constructors (fungibles)
 [package.metadata.ink-lang]
-abi = "sol"
+abi = "all"
 
 [workspace]
 

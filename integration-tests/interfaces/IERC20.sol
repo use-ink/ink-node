@@ -28,6 +28,11 @@ interface IERC20 {
     function totalSupply() external view returns (uint256);
 
     /**
+     * @dev Returns the value of tokens in existence.
+     */
+    function assetId() external view returns (uint32);
+
+    /**
      * @dev Returns the value of tokens owned by `account`.
      */
     function balanceOf(address account) external view returns (uint256);

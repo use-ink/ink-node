@@ -1,6 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std, no_main)]
 
-use ink::{abi::Sol, sol::SolErrorDecode, env::DefaultEnvironment, Address, U256, contract_ref};
+use ink::{prelude::string::String, abi::Sol, env::DefaultEnvironment, Address, U256, contract_ref};
 
 /// Asset Hub ERC20 precompile index
 pub const PRECOMPILE_INDEX: u16 = 0x0120;
@@ -30,6 +30,10 @@ pub fn prefixed_address(n: u16, prefix: u32) -> Address {
     Address::from(address_bytes)
 }
 
+#[derive(ink::SolErrorDecode, ink::SolErrorEncode)]
+#[ink::scale_derive(Encode, Decode, TypeInfo)]
+pub struct Error(pub(crate) String);
+
 /// Asset Hub precompile interface.
 #[ink::contract]
 pub mod asset_hub_precompile {
@@ -47,17 +51,23 @@ pub mod asset_hub_precompile {
         fn balanceOf(&self, account: Address) -> U256;
 
         #[ink(message)]
-        fn transfer(&mut self, to: Address, value: U256) -> bool;
+        fn transfer(&mut self, to: Address, value: U256) -> Result<bool, Error>;
 
         #[ink(message)]
         fn allowance(&self, owner: Address, spender: Address) -> U256;
 
         #[ink(message)]
-        fn approve(&mut self, spender: Address, value: U256) -> bool;
+        fn approve(&mut self, spender: Address, value: U256) -> Result<bool, Error>;
 
         #[ink(message)]
         #[allow(non_snake_case)]
-        fn transferFrom(&mut self, from: Address, to: Address, value: U256) -> bool;
+        fn transferFrom(&mut self, from: Address, to: Address, value: U256) -> Result<bool, Error>;
+    }
+
+    #[ink::event]
+    #[cfg_attr(feature = "std", derive(Debug))]
+    pub struct Created {
+        pub id: AssetId,
     }
 
     #[ink(storage)]
@@ -68,7 +78,9 @@ pub mod asset_hub_precompile {
     impl AssetHubPrecompile {
         #[ink(constructor, payable)]
         pub fn create(asset_id: AssetId) -> Self {
-            Self { asset_id }
+            let contract = Self { asset_id };
+            contract.env().emit_event(Created { id: asset_id });
+            contract
         }
 
         #[ink(message)]
@@ -86,14 +98,14 @@ pub mod asset_hub_precompile {
         }
 
         #[ink(message)]
-        pub fn transfer(&mut self, to: Address, amount: U256) -> bool {
+        pub fn transfer(&mut self, to: Address, amount: U256) -> Result<bool, Error> {
             let precompile_address = prefixed_address(PRECOMPILE_INDEX, self.asset_id);
             let mut precompile: contract_ref!(Erc20, DefaultEnvironment, Sol) = precompile_address.into();
             precompile.transfer(to, amount)
         }
 
         #[ink(message)]
-        pub fn approve(&mut self, spender: Address, amount: U256) -> bool {
+        pub fn approve(&mut self, spender: Address, amount: U256) -> Result<bool, Error> {
             let precompile_address = prefixed_address(PRECOMPILE_INDEX, self.asset_id);
             let mut precompile: contract_ref!(Erc20, DefaultEnvironment, Sol) = precompile_address.into();
             precompile.approve(spender, amount)
@@ -107,10 +119,16 @@ pub mod asset_hub_precompile {
         }
 
         #[ink(message)]
-        pub fn transferFrom(&mut self, from: Address, to: Address, amount: U256) -> bool {
+        pub fn transferFrom(&mut self, from: Address, to: Address, amount: U256) -> Result<bool, Error> {
             let precompile_address = prefixed_address(PRECOMPILE_INDEX, self.asset_id);
             let mut precompile: contract_ref!(Erc20, DefaultEnvironment, Sol) = precompile_address.into();
             precompile.transferFrom(from, to, amount)
+        }
+
+        #[ink(message)]
+        pub fn assetId(&self) -> AssetId {
+            self.asset_id
+            // 42
         }
     }
 }
