@@ -16,7 +16,9 @@ concurrency:
 # common variable is defined in the workflow
 # repo env variable doesn't work for PR from forks
 env:
-  CI_IMAGE: "paritytech/ci-unified:bullseye-1.85.0-2025-01-28-v202506021710"
+  CI_IMAGE: "useink/ci"
+  POLKADOT_SDK_COMMIT: "cb629d46ebf00aa65624013a61f9c69ebf02b0b4"
+  RUST_VERSION: 1.87.0
 
 jobs:
   set-image:
@@ -63,7 +65,7 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Clone polkadot-sdk
         run: |
-          git clone --depth 1 --branch polkadot-stable2503 https://github.com/paritytech/polkadot-sdk.git
+          git clone --depth 100 --branch master https://github.com/paritytech/polkadot-sdk.git
       - name: Rust Cache
         uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
         with:
@@ -83,6 +85,7 @@ jobs:
           cargo test --release --all
           echo "######## Building eth-rpc ########"
           cd polkadot-sdk
+          git checkout $POLKADOT_SDK_COMMIT
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc
           cd ..
           echo "######## Packing artifacts ########"
@@ -112,7 +115,7 @@ jobs:
           apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
       - name: Clone polkadot-sdk
         run: |
-          git clone --depth 1 --branch polkadot-stable2503 https://github.com/paritytech/polkadot-sdk.git
+          git clone --depth 100 --branch master https://github.com/paritytech/polkadot-sdk.git
       - name: Rust Cache
         uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
         with:
@@ -132,6 +135,7 @@ jobs:
           cargo build --release --target aarch64-unknown-linux-gnu
           echo "######## Building eth-rpc ########"
           cd polkadot-sdk
+          git checkout $POLKADOT_SDK_COMMIT
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc --target aarch64-unknown-linux-gnu
           cd ..
           echo "######## Packing artifacts ########"
@@ -157,13 +161,7 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Clone polkadot-sdk
         run: |
-          git clone --depth 1 --branch polkadot-stable2503 https://github.com/paritytech/polkadot-sdk.git
-      - name: Set rust version from env file
-        run: |
-          echo $CI_IMAGE
-          RUST_VERSION=$(echo $CI_IMAGE | sed -E 's/.*ci-unified:([^-]+)-([^-]+).*/\2/')
-          echo $RUST_VERSION
-          echo "RUST_VERSION=${RUST_VERSION}" >> $GITHUB_ENV
+          git clone --depth 100 --branch master https://github.com/paritytech/polkadot-sdk.git
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@1ccc07ccd54b6048295516a3eb89b192c35057dc # master from 12.09.2024
       - name: Install protobuf
@@ -194,6 +192,7 @@ jobs:
           cargo build --release --target x86_64-apple-darwin
           echo "######## cargo build aarch64-apple-darwin eth-rpc ########"
           cd polkadot-sdk
+          git checkout $POLKADOT_SDK_COMMIT
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc --target aarch64-apple-darwin
           echo "######## cargo build x86_64-apple-darwin eth-rpc ########"
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc --target x86_64-apple-darwin
