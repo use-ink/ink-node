@@ -17,7 +17,7 @@ concurrency:
 # repo env variable doesn't work for PR from forks
 env:
   CI_IMAGE: "useink/ci"
-  POLKADOT_SDK_COMMIT: "cb629d46ebf00aa65624013a61f9c69ebf02b0b4"
+  POLKADOT_SDK_COMMIT: "c40b36c3a7c208f9a6837b80812473af3d9ba7f7"
   RUST_VERSION: 1.87.0
 
 jobs:
