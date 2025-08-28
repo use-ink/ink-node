@@ -2,36 +2,11 @@
 
 use ink::{prelude::string::String, abi::Sol, env::DefaultEnvironment, Address, U256, contract_ref};
 
-/// Asset Hub ERC20 precompile index
+/// Passet Hub ERC20 precompile index
 pub const PRECOMPILE_INDEX: u16 = 0x0120;
 pub type AssetId = u32;
 
-/// Calculates the address of a precompile at index `n` and with some additional prefix.
-#[inline]
-pub fn fixed_address(n: u16) -> Address {
-    let shifted = (n as u32) << 16;
-
-    let suffix = shifted.to_be_bytes();
-    let mut address = [0u8; 20];
-    let mut i = 16;
-    while i < address.len() {
-        address[i] = suffix[i - 16];
-        i = i + 1;
-    }
-    Address::from(address)
-}
-
-/// Calculates the address of a precompile at index `n` and with some additional prefix.
-#[inline]
-pub fn prefixed_address(n: u16, prefix: u32) -> Address {
-    let address = fixed_address(n);
-    let mut address_bytes: [u8; 20] = address.into();
-    address_bytes[..4].copy_from_slice(&prefix.to_be_bytes());
-    Address::from(address_bytes)
-}
-
 #[derive(ink::SolErrorDecode, ink::SolErrorEncode)]
-#[ink::scale_derive(Encode, Decode, TypeInfo)]
 pub struct Error(pub(crate) String);
 
 /// Asset Hub precompile interface.
@@ -64,12 +39,6 @@ pub mod asset_hub_precompile {
         fn transferFrom(&mut self, from: Address, to: Address, value: U256) -> Result<bool, Error>;
     }
 
-    #[ink::event]
-    #[cfg_attr(feature = "std", derive(Debug))]
-    pub struct Created {
-        pub id: AssetId,
-    }
-
     #[ink(storage)]
     pub struct AssetHubPrecompile {
         asset_id: AssetId,
@@ -78,58 +47,82 @@ pub mod asset_hub_precompile {
     impl AssetHubPrecompile {
         #[ink(constructor, payable)]
         pub fn create(asset_id: AssetId) -> Self {
-            let contract = Self { asset_id };
-            contract.env().emit_event(Created { id: asset_id });
-            contract
+            Self { asset_id }
         }
 
         #[ink(message)]
-        pub fn totalSupply(&self) -> U256 {
+        #[allow(non_snake_case)]
+        pub fn assetId(&self) -> AssetId {
+            self.asset_id
+        }
+    }
+
+    impl Erc20 for AssetHubPrecompile {
+        #[ink(message)]
+        fn totalSupply(&self) -> U256 {
             let precompile_address = prefixed_address(PRECOMPILE_INDEX, self.asset_id);
             let precompile: contract_ref!(Erc20, DefaultEnvironment, Sol) = precompile_address.into();
             precompile.totalSupply()
         }
 
         #[ink(message)]
-        pub fn balanceOf(&self, account: Address) -> U256 {
+        fn balanceOf(&self, account: Address) -> U256 {
             let precompile_address = prefixed_address(PRECOMPILE_INDEX, self.asset_id);
             let precompile: contract_ref!(Erc20, DefaultEnvironment, Sol) = precompile_address.into();
             precompile.balanceOf(account)
         }
 
         #[ink(message)]
-        pub fn transfer(&mut self, to: Address, amount: U256) -> Result<bool, Error> {
+        fn transfer(&mut self, to: Address, amount: U256) -> Result<bool, Error> {
             let precompile_address = prefixed_address(PRECOMPILE_INDEX, self.asset_id);
             let mut precompile: contract_ref!(Erc20, DefaultEnvironment, Sol) = precompile_address.into();
             precompile.transfer(to, amount)
         }
 
         #[ink(message)]
-        pub fn approve(&mut self, spender: Address, amount: U256) -> Result<bool, Error> {
+        fn approve(&mut self, spender: Address, amount: U256) -> Result<bool, Error> {
             let precompile_address = prefixed_address(PRECOMPILE_INDEX, self.asset_id);
             let mut precompile: contract_ref!(Erc20, DefaultEnvironment, Sol) = precompile_address.into();
             precompile.approve(spender, amount)
         }
 
         #[ink(message)]
-        pub fn allowance(&self, owner: Address, spender: Address) -> U256 {
+        fn allowance(&self, owner: Address, spender: Address) -> U256 {
             let precompile_address = prefixed_address(PRECOMPILE_INDEX, self.asset_id);
             let precompile: contract_ref!(Erc20, DefaultEnvironment, Sol) = precompile_address.into();
             precompile.allowance(owner, spender)
         }
 
         #[ink(message)]
-        pub fn transferFrom(&mut self, from: Address, to: Address, amount: U256) -> Result<bool, Error> {
+        fn transferFrom(&mut self, from: Address, to: Address, amount: U256) -> Result<bool, Error> {
             let precompile_address = prefixed_address(PRECOMPILE_INDEX, self.asset_id);
             let mut precompile: contract_ref!(Erc20, DefaultEnvironment, Sol) = precompile_address.into();
             precompile.transferFrom(from, to, amount)
         }
+    }
 
-        #[ink(message)]
-        pub fn assetId(&self) -> AssetId {
-            self.asset_id
-            // 42
+    /// Calculates the address of a precompile at index `n`.
+    #[inline]
+    pub fn fixed_address(n: u16) -> Address {
+        let shifted = (n as u32) << 16;
+
+        let suffix = shifted.to_be_bytes();
+        let mut address = [0u8; 20];
+        let mut i = 16;
+        while i < address.len() {
+            address[i] = suffix[i - 16];
+            i = i + 1;
         }
+        Address::from(address)
+    }
+
+    /// Calculates the address of a precompile at index `n` and with some additional prefix.
+    #[inline]
+    pub fn prefixed_address(n: u16, prefix: u32) -> Address {
+        let address = fixed_address(n);
+        let mut address_bytes: [u8; 20] = address.into();
+        address_bytes[..4].copy_from_slice(&prefix.to_be_bytes());
+        Address::from(address_bytes)
     }
 }
 
