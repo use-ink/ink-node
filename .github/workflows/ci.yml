@@ -18,7 +18,7 @@ concurrency:
 env:
   CI_IMAGE: "useink/ci"
   POLKADOT_SDK_COMMIT: "a71ec19a94702ea71767ba5ac97603ea6c6305c1"
-  RUST_VERSION: 1.87.0
+  RUST_VERSION: 1.88.0
 
 jobs:
   set-image:
