@@ -1,7 +1,7 @@
 [workspace.package]
 authors = ["Use Ink <ink@use.ink>"]
 edition = "2021"
-version = "0.44.0"
+version = "0.45.0"
 license = "Unlicense"
 homepage = "https://use.ink"
 repository = "https://github.com/use-ink/ink-node"
