@@ -34,6 +34,7 @@ impl pallet_revive::Config for Runtime {
 	type DepositPerByte = DepositPerByte;
 	type WeightPrice = pallet_transaction_payment::Pallet<Self>;
 	type WeightInfo = pallet_revive::weights::SubstrateWeight<Self>;
+	type Precompiles = (ERC20<Self, InlineIdConfig<0x120>, ()>, XcmPrecompile<Self>);
 	type AddressMapper = pallet_revive::AccountId32Mapper<Self>;
 	type RuntimeMemory = ConstU32<{ 128 * 1024 * 1024 }>;
 	type PVFMemory = ConstU32<{ 512 * 1024 * 1024 }>;
@@ -46,5 +47,5 @@ impl pallet_revive::Config for Runtime {
 	type NativeToEthRatio = ConstU32<100_000_000>; // 10^(18 - 10) Eth is 10^18, Native is 10^10.
 	type EthGasEncoder = ();
 	type FindAuthor = <Runtime as pallet_authorship::Config>::FindAuthor;
-	type Precompiles = (ERC20<Self, InlineIdConfig<0x120>, ()>, XcmPrecompile<Self>);
+	type AllowEVMBytecode = ConstBool<false>;
 }
