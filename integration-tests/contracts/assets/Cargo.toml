@@ -10,7 +10,7 @@ abi = "sol"
 [workspace]
 
 [dependencies]
-ink = { git = "https://github.com/use-ink/ink", branch = "nightly", default-features = false, features = ["unstable-hostfn"] }
+ink = { git = "https://github.com/use-ink/ink.git", tag = "v6.0.0-alpha.3", default-features = false, features = ["unstable-hostfn"] }
 
 [dev-dependencies]
 scale-info = { version = "2" }

@@ -51,7 +51,7 @@ fn bare_call(
 	storage_deposit_limit: DepositLimit<Balance>,
 	data: Vec<u8>,
 ) -> Result<ExecReturnValue, DispatchError> {
-	let result = Revive::bare_call(origin, dest, value, gas_limit, storage_deposit_limit, data);
+	let result = Revive::bare_call(origin, dest, Revive::convert_native_to_evm(value), gas_limit, storage_deposit_limit, data);
 	log::info!("contract exec result={result:?}");
 	result.result
 }
@@ -72,15 +72,15 @@ fn instantiate(
 ) -> H160 {
 	let binary = std::fs::read(contract).expect("could not read .polkavm file");
 
-	let result = Revive::bare_instantiate(
-		origin,
-		value,
-		GAS_LIMIT,
+    let result = Revive::bare_instantiate(
+        origin,
+		Revive::convert_native_to_evm(value),
+        GAS_LIMIT,
 		DepositLimit::Balance(Balance::MAX),
-		Code::Upload(binary),
-		data,
-		salt,
-		BumpNonce::Yes,
+        Code::Upload(binary),
+        data,
+        salt,
+        BumpNonce::Yes,
 	)
 	.result
 	.unwrap();

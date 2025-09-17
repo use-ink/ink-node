@@ -18,8 +18,8 @@ const fn deposit(items: u32, bytes: u32) -> Balance {
 }
 
 parameter_types! {
-	pub const DepositPerItem: Balance = deposit(1, 0);
-	pub const DepositPerByte: Balance = deposit(0, 1);
+	pub const DepositPerItem: Balance = 1;
+	pub const DepositPerByte: Balance = 1;
 	pub const DefaultDepositLimit: Balance = deposit(1024, 1024 * 1024);
 	pub const CodeHashLockupDepositPercent: Perbill = Perbill::from_percent(0);
 	pub const MaxDelegateDependencies: u32 = 32;
