@@ -2,7 +2,15 @@
 
 use std::path::Path;
 
-use frame_support::{assert_ok, weights::Weight};
+use frame_support::{
+	assert_ok,
+	traits::{
+		Currency,
+		fungible::Mutate,
+		fungibles::Inspect,
+	},
+	weights::Weight,
+};
 use ink_parachain_runtime::{
 	AccountId, Assets, Balance, Balances, Revive, Runtime, RuntimeOrigin, System, UNIT,
 };
@@ -22,6 +30,21 @@ const INIT_VALUE: Balance = 100 * UNIT;
 const STORAGE_DEPOSIT_LIMIT: DepositLimit<Balance> = DepositLimit::Balance(Balance::MAX);
 
 type AssetId = u32;
+
+/// `pallet-revive` recently introduced a dedicated "pallet" account for
+/// tracking storage deposits. This static account is returned by the
+/// `pallet_revive::Pallet::account_id()` function.
+///
+/// This function here funds the account with the existential deposit
+/// (i.e. minimum balance).
+///
+fn warm_up() {
+	let deposit_account = Revive::account_id();
+	let existential_deposit = Balances::minimum_balance();
+	Balances::mint_into(&deposit_account, existential_deposit).unwrap_or_else(|err| {
+		panic!("Failed to mint existential balance into `pallet-revive` account: {err:?}")
+	});
+}
 
 // Get the last event from `pallet-revive`.
 fn last_contract_event(address: &H160) -> Vec<u8> {
@@ -70,6 +93,7 @@ fn instantiate(
 	data: Vec<u8>,
 	salt: Option<[u8; 32]>,
 ) -> H160 {
+	warm_up();
 	let binary = std::fs::read(contract).expect("could not read .polkavm file");
 
     let result = Revive::bare_instantiate(
