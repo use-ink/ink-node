@@ -57,16 +57,12 @@ pallet-utility = { workspace = true }
 frame-benchmarking = { workspace = true, optional = true }
 frame-system-benchmarking = { workspace = true, optional = true }
 
-# todo Pin until https://github.com/jhpratt/deranged/issues/18 is resolved
-deranged = { version = "=0.4.0", default-features = false }
-
 [build-dependencies]
 substrate-wasm-builder = { workspace = true, optional = true }
 
 [features]
 default = ["std"]
 std = [
-	"deranged/std",
 	"codec/std",
 	"frame-benchmarking?/std",
 	"frame-executive/std",
