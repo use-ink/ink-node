@@ -28,8 +28,8 @@ serde_json = { workspace = true }
 # Local
 ink-parachain-runtime = { path = "../parachain-runtime", features = [
   "parachain",
-], version = "0.45.0" }
-ink-node-runtime = { path = "../runtime", version = "0.45.0" }
+], version = "0.46.0" }
+ink-node-runtime = { path = "../runtime", version = "0.46.0" }
 
 # Substrate
 frame-benchmarking = { workspace = true }
