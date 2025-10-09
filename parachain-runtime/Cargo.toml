@@ -78,6 +78,7 @@ pallet-revive = { workspace = true }
 pallet-utility = { workspace = true }
 pallet-insecure-randomness-collective-flip = { workspace = true }
 pallet-assets = { workspace = true }
+pallet-assets-precompiles = { workspace = true }
 
 [features]
 default = ["std"]

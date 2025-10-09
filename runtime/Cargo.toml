@@ -48,6 +48,7 @@ polkadot-runtime-common = { workspace = true }
 
 # extra deps for setting up pallet-revive
 pallet-assets = { workspace = true }
+pallet-assets-precompiles = { workspace = true }
 pallet-authorship = { workspace = true }
 pallet-insecure-randomness-collective-flip = { workspace = true }
 pallet-revive = { workspace = true }
