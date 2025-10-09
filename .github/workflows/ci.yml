@@ -17,8 +17,8 @@ concurrency:
 # repo env variable doesn't work for PR from forks
 env:
   CI_IMAGE: "useink/ci"
-  POLKADOT_SDK_COMMIT: "a71ec19a94702ea71767ba5ac97603ea6c6305c1"
-  POLKADOT_SDK_BRANCH: "pallet-revive-with-system-and-storage-precompiles"
+  POLKADOT_SDK_COMMIT: "1b1cef306d9ceebf963fd15a04b5c79ee2618bce"
+  POLKADOT_SDK_BRANCH: "master"
   RUST_VERSION: 1.88.0
 
 jobs:
@@ -66,7 +66,7 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Clone polkadot-sdk
         run: |
-          git clone --depth 100 --branch $POLKADOT_SDK_BRANCH https://github.com/use-ink/polkadot-sdk.git
+          git clone --depth 100 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
       - name: Rust Cache
         uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
         with:
@@ -116,7 +116,7 @@ jobs:
           apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
       - name: Clone polkadot-sdk
         run: |
-          git clone --depth 100 --branch $POLKADOT_SDK_BRANCH https://github.com/use-ink/polkadot-sdk.git
+          git clone --depth 100 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
       - name: Rust Cache
         uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
         with:
@@ -162,7 +162,7 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Clone polkadot-sdk
         run: |
-          git clone --depth 100 --branch $POLKADOT_SDK_BRANCH https://github.com/use-ink/polkadot-sdk.git
+          git clone --depth 100 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@1ccc07ccd54b6048295516a3eb89b192c35057dc # master from 12.09.2024
       - name: Install protobuf
