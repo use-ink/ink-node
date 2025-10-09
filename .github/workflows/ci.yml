@@ -181,10 +181,7 @@ jobs:
           echo "######## cargo --version ########"
           cargo --version
           brew install llvm
-          export LIBCLANG_PATH="$(brew --prefix llvm)/lib"
-          export LD_LIBRARY_PATH="$LIBCLANG_PATH:$LD_LIBRARY_PATH"
-          export CPATH="$(brew --prefix llvm)/include"
-          export PATH="$(brew --prefix llvm)/bin:$PATH"
+          fd libclang.dylib /
       - name: Rust Cache
         uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
         with:
@@ -192,6 +189,13 @@ jobs:
           cache-all-crates: true
       - name: Run cargo build
         run: |
+          export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+          export LIBCLANG_PATH="$(brew --prefix llvm)/lib"
+          export LD_LIBRARY_PATH="$LIBCLANG_PATH:$LD_LIBRARY_PATH"
+          export CPATH="$(brew --prefix llvm)/include"
+          export PATH="$(brew --prefix llvm)/bin:$PATH"
+          export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+          export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
           echo "######## cargo build aarch64-apple-darwin ########"
           cargo build --release --target aarch64-apple-darwin
           echo "######## cargo build x86_64-apple-darwin ########"
