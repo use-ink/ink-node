@@ -86,7 +86,6 @@ substrate-frame-rpc-system = { git = "https://github.com/paritytech/polkadot-sdk
 prometheus-endpoint = { git = "https://github.com/paritytech/polkadot-sdk", rev = "fea33a9dd5e7133c95c5e0496b8e9fd9e215c855", package = "substrate-prometheus-endpoint", default-features = false }
 substrate-wasm-builder = { git = "https://github.com/paritytech/polkadot-sdk", rev = "fea33a9dd5e7133c95c5e0496b8e9fd9e215c855" }
 substrate-build-script-utils = { git = "https://github.com/paritytech/polkadot-sdk", rev = "fea33a9dd5e7133c95c5e0496b8e9fd9e215c855" }
-try-runtime-cli = { version = "0.42.0" }
 
 # extra deps for running a solo node on top of a parachain
 pallet-grandpa = { git = "https://github.com/paritytech/polkadot-sdk", rev = "fea33a9dd5e7133c95c5e0496b8e9fd9e215c855", default-features = false }
