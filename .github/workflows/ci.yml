@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Rust Cache
-        uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
+        uses: Swatinem/rust-cache@v2
         with:
           cache-on-failure: true
           cache-all-crates: true
@@ -63,12 +63,14 @@ jobs:
     container:
       image: ${{ needs.set-image.outputs.CI_IMAGE }}
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Clone polkadot-sdk
         run: |
-          git clone --depth 100 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
+          git clone --depth 20 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
       - name: Rust Cache
-        uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
+        uses: Swatinem/rust-cache@v2
         with:
           cache-on-failure: true
           cache-all-crates: true
@@ -108,6 +110,8 @@ jobs:
     container:
       image: ${{ needs.set-image.outputs.CI_IMAGE }}
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Install ARM64 toolchain
         run: |
@@ -116,9 +120,9 @@ jobs:
           apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
       - name: Clone polkadot-sdk
         run: |
-          git clone --depth 100 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
+          git clone --depth 20 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
       - name: Rust Cache
-        uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
+        uses: Swatinem/rust-cache@v2
         with:
           cache-on-failure: true
           cache-all-crates: true
@@ -162,7 +166,7 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Clone polkadot-sdk
         run: |
-          git clone --depth 100 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
+          git clone --depth 20 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@1ccc07ccd54b6048295516a3eb89b192c35057dc # master from 12.09.2024
       - name: Install protobuf
@@ -182,7 +186,7 @@ jobs:
           cargo --version
           brew install llvm
       - name: Rust Cache
-        uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
+        uses: Swatinem/rust-cache@v2
         with:
           cache-on-failure: true
           cache-all-crates: true
