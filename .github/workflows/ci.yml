@@ -76,9 +76,6 @@ jobs:
           remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell /usr/local/julia /usr/local/aws-cli /usr/local/aws-sam-cli /usr/share/gradle"
           testing: false
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - name: Clone polkadot-sdk
-        run: |
-          git clone --depth 20 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
         with:
@@ -97,6 +94,7 @@ jobs:
           echo "######## cargo test ########"
           cargo test --release --all
           echo "######## Building eth-rpc ########"
+          git clone --depth 20 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
           cd polkadot-sdk
           git checkout $POLKADOT_SDK_COMMIT
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc
@@ -138,9 +136,6 @@ jobs:
           rustup target add aarch64-unknown-linux-gnu
           apt update
           apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
-      - name: Clone polkadot-sdk
-        run: |
-          git clone --depth 20 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
         with:
@@ -159,6 +154,7 @@ jobs:
           echo "######## cargo build ########"
           cargo build --release --target aarch64-unknown-linux-gnu
           echo "######## Building eth-rpc ########"
+          git clone --depth 20 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
           cd polkadot-sdk
           git checkout $POLKADOT_SDK_COMMIT
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc --target aarch64-unknown-linux-gnu
