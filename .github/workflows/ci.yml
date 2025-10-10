@@ -63,8 +63,8 @@ jobs:
     container:
       image: ${{ needs.set-image.outputs.CI_IMAGE }}
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
+      - name: Free Disk Space
+        uses: endersonmenezes/free-disk-space@v2
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Clone polkadot-sdk
         run: |
@@ -110,8 +110,8 @@ jobs:
     container:
       image: ${{ needs.set-image.outputs.CI_IMAGE }}
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
+      - name: Free Disk Space
+        uses: endersonmenezes/free-disk-space@v2
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Install ARM64 toolchain
         run: |
