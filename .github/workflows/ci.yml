@@ -89,10 +89,13 @@ jobs:
           cargo --version
       - name: Build and Test Linux
         run: |
+          mkdir -p ./artifacts/ink-node-linux/
           echo "######## cargo build ########"
           cargo build --release
+          cp target/release/ink-node ./artifacts/ink-node-linux/ink-node
           echo "######## cargo test ########"
           cargo test --release --all
+          rm -rf target/
           echo "######## Building eth-rpc ########"
           git clone --depth 20 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
           cd polkadot-sdk
@@ -100,8 +103,6 @@ jobs:
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc
           cd ..
           echo "######## Packing artifacts ########"
-          mkdir -p ./artifacts/ink-node-linux/
-          cp target/release/ink-node ./artifacts/ink-node-linux/ink-node
           cp polkadot-sdk/target/production/eth-rpc ./artifacts/ink-node-linux/eth-rpc
           ls -la ./artifacts/ink-node-linux/
       - name: Upload artifacts
@@ -151,8 +152,11 @@ jobs:
         env:
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
         run: |
+          mkdir -p ./artifacts/ink-node-linux-arm64/
           echo "######## cargo build ########"
           cargo build --release --target aarch64-unknown-linux-gnu
+          cp target/aarch64-unknown-linux-gnu/release/ink-node ./artifacts/ink-node-linux-arm64/ink-node
+          rm -rf target/
           echo "######## Building eth-rpc ########"
           git clone --depth 20 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
           cd polkadot-sdk
@@ -160,8 +164,6 @@ jobs:
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc --target aarch64-unknown-linux-gnu
           cd ..
           echo "######## Packing artifacts ########"
-          mkdir -p ./artifacts/ink-node-linux-arm64/
-          cp target/aarch64-unknown-linux-gnu/release/ink-node ./artifacts/ink-node-linux-arm64/ink-node
           cp polkadot-sdk/target/aarch64-unknown-linux-gnu/production/eth-rpc ./artifacts/ink-node-linux-arm64/eth-rpc
           ls -la ./artifacts/ink-node-linux-arm64/
       - name: Upload artifacts
