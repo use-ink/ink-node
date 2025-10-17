@@ -52,6 +52,7 @@ sp-genesis-builder = { workspace = true }
 
 # Polkadot
 pallet-xcm = { workspace = true }
+pallet-xcm-precompiles = { workspace = true }
 polkadot-parachain-primitives = { workspace = true }
 polkadot-runtime-common = { workspace = true }
 xcm = { workspace = true }
