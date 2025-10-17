@@ -8,7 +8,7 @@ use frame_support::{
 };
 use frame_system::EnsureSigned;
 use pallet_assets_precompiles::{InlineIdConfig, ERC20};
-use pallet_xcm::precompiles::XcmPrecompile;
+use pallet_xcm_precompiles::XcmPrecompile;
 use sp_runtime::FixedU128;
 
 // Unit = the base number of indivisible units for balances
@@ -21,6 +21,7 @@ const fn deposit(items: u32, bytes: u32) -> Balance {
 
 parameter_types! {
 	pub const DepositPerItem: Balance = deposit(1, 0);
+	pub const DepositPerChildTrieItem: Balance = deposit(1, 0) / 100;
 	pub const DepositPerByte: Balance = deposit(0, 1);
 	pub const DefaultDepositLimit: Balance = deposit(1024, 1024 * 1024);
 	pub const CodeHashLockupDepositPercent: Perbill = Perbill::from_percent(0);
@@ -35,6 +36,7 @@ impl pallet_revive::Config for Runtime {
 	type RuntimeCall = RuntimeCall;
 	type RuntimeOrigin = RuntimeOrigin;
 	type DepositPerItem = DepositPerItem;
+	type DepositPerChildTrieItem = DepositPerChildTrieItem;
 	type DepositPerByte = DepositPerByte;
 	type WeightInfo = pallet_revive::weights::SubstrateWeight<Self>;
 	type Precompiles = (ERC20<Self, InlineIdConfig<0x120>, ()>, XcmPrecompile<Self>);
