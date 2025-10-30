@@ -47,7 +47,19 @@ and just execute `./ink-node`.
 
 ### Build Locally
 
-Follow the [official installation steps](https://docs.substrate.io/install/) to set up all Substrate prerequisites.
+Follow the [official installation steps](https://docs.polkadot.com/develop/parachains/install-polkadot-sdk/) to set up all Polkadot SDK prerequisites.
+
+For Mac: make sure you have `llvm` installed.
+```
+brew install llvm
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+export LIBCLANG_PATH="$(brew --prefix llvm)/lib"
+export LD_LIBRARY_PATH="$LIBCLANG_PATH:$LD_LIBRARY_PATH"
+export CPATH="$(brew --prefix llvm)/include"
+export PATH="$(brew --prefix llvm)/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+```
 
 Afterwards you can install this node via
 
