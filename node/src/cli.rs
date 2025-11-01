@@ -80,6 +80,23 @@ pub struct Cli {
 	/// The number of seconds to delay before finalizing blocks.
 	#[arg(long, default_value_t = 1)]
 	pub finalize_delay_sec: u8,
+
+	/// Start a dev node with instant seal.
+	///
+	/// This is a dev option that enables instant sealing, meaning blocks are produced
+	/// immediately when transactions are received, rather than at fixed intervals.
+	/// Using this option won't result in starting or connecting to a parachain network.
+	/// The resulting node will work on its own, running the wasm blob and producing blocks
+	/// instantly upon receiving transactions.
+	#[arg(long)]
+	pub instant_seal: bool,
+}
+
+impl Cli {
+	/// Returns true if instant seal mode is enabled.
+	pub fn is_instant_seal(&self) -> bool {
+		self.instant_seal
+	}
 }
 
 #[derive(Debug)]

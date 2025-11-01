@@ -10,7 +10,7 @@
 # zombienet spawn --provider native zombienet.toml
 
 [relaychain]
-chain = "rococo-local"
+chain = "paseo-local"
 command = "polkadot"
 
 [[relaychain.nodes]]

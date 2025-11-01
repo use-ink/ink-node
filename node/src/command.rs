@@ -222,8 +222,20 @@ pub fn run() -> Result<()> {
 			let collator_options = cli.run.collator_options();
 
 			runner.run_node_until_exit(|config| async move {
+				// Check for solochain dev mode first (chain spec "Development")
+				// The solochain runtime doesn't have Aura, so it needs separate handling
 				if config.chain_spec.name() == "Development" {
 					return dev::new_full::<sc_network::NetworkWorker<_, _>>(
+						config,
+						cli.finalize_delay_sec.into(),
+					)
+					.await
+					.map_err(sc_cli::Error::Service);
+				}
+
+				// Check for instant seal mode for parachain (requires parachain runtime with Aura)
+				if cli.is_instant_seal() {
+					return crate::service::start_dev_parachain_node(
 						config,
 						cli.finalize_delay_sec.into(),
 					)

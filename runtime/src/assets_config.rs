@@ -1,20 +1,38 @@
-use crate::{AccountId, Balance, Balances, Runtime, RuntimeEvent};
+use crate::{AccountId, Balance, Balances, Runtime, RuntimeEvent, EXISTENTIAL_DEPOSIT};
 use frame_support::{
 	parameter_types,
-	traits::{AsEnsureOriginWithArg, ConstU128, ConstU32},
+	traits::{AsEnsureOriginWithArg, ConstU32},
 };
 use frame_system::EnsureSigned;
 
-pub const MILLICENTS: Balance = 1_000_000_000;
-pub const CENTS: Balance = 1_000 * MILLICENTS; // assume this is worth about a cent.
-pub const DOLLARS: Balance = 100 * CENTS;
+// Currency constants matching Paseo Asset Hub
+const UNITS: Balance = 10_000_000_000;
+const DOLLARS: Balance = UNITS;
+const MILLICENTS: Balance = DOLLARS / 100_000;
+
+// System parachain deposit calculation matching Paseo
+// Paseo uses: (items * 20 * DOLLARS + bytes * 100 * MILLICENTS) / 100
+const fn system_para_deposit(items: u32, bytes: u32) -> Balance {
+	((items as Balance) * 20 * DOLLARS + (bytes as Balance) * 100 * MILLICENTS) / 100
+}
 
 parameter_types! {
-	pub const AssetDeposit: Balance = 100 * DOLLARS;
-	pub const ApprovalDeposit: Balance = 1 * DOLLARS;
+	// Matches Paseo Asset Hub: system_para_deposit(1, 190)
+	pub const AssetDeposit: Balance = system_para_deposit(1, 190); // 2_019_000_000
+
+	// Matches Paseo Asset Hub: system_para_deposit(1, 16)
+	pub const AssetAccountDeposit: Balance = system_para_deposit(1, 16); // 2_001_600_000
+
+	// Matches Paseo Asset Hub: ExistentialDeposit
+	pub const ApprovalDeposit: Balance = EXISTENTIAL_DEPOSIT; // 100_000_000
+
 	pub const StringLimit: u32 = 50;
-	pub const MetadataDepositBase: Balance = 10 * DOLLARS;
-	pub const MetadataDepositPerByte: Balance = 1 * DOLLARS;
+
+	// Matches Paseo Asset Hub: system_para_deposit(1, 68)
+	pub const MetadataDepositBase: Balance = system_para_deposit(1, 68); // 2_006_800_000
+
+	// Matches Paseo Asset Hub: system_para_deposit(0, 1)
+	pub const MetadataDepositPerByte: Balance = system_para_deposit(0, 1); // 100_000
 }
 
 impl pallet_assets::Config for Runtime {
@@ -26,7 +44,7 @@ impl pallet_assets::Config for Runtime {
 	type Currency = Balances;
 	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
 	type AssetDeposit = AssetDeposit;
-	type AssetAccountDeposit = ConstU128<DOLLARS>;
+	type AssetAccountDeposit = AssetAccountDeposit;
 	type MetadataDepositBase = MetadataDepositBase;
 	type MetadataDepositPerByte = MetadataDepositPerByte;
 	type ApprovalDeposit = ApprovalDeposit;
