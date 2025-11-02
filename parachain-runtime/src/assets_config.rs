@@ -5,33 +5,22 @@ use frame_support::{
 };
 use frame_system::EnsureSigned;
 
-// Currency constants matching Paseo Asset Hub
 const UNITS: Balance = 10_000_000_000;
 const DOLLARS: Balance = UNITS;
 const MILLICENTS: Balance = DOLLARS / 100_000;
 
-// System parachain deposit calculation matching Paseo
-// Paseo uses: (items * 20 * DOLLARS + bytes * 100 * MILLICENTS) / 100
+// System parachain deposit formula:
+// (items * 20 * DOLLARS + bytes * 100 * MILLICENTS) / 100
 const fn system_para_deposit(items: u32, bytes: u32) -> Balance {
 	((items as Balance) * 20 * DOLLARS + (bytes as Balance) * 100 * MILLICENTS) / 100
 }
 
 parameter_types! {
-	// Matches Paseo Asset Hub: system_para_deposit(1, 190)
 	pub const AssetDeposit: Balance = system_para_deposit(1, 190); // 2_019_000_000
-
-	// Matches Paseo Asset Hub: system_para_deposit(1, 16)
 	pub const AssetAccountDeposit: Balance = system_para_deposit(1, 16); // 2_001_600_000
-
-	// Matches Paseo Asset Hub: ExistentialDeposit
 	pub const ApprovalDeposit: Balance = EXISTENTIAL_DEPOSIT; // 100_000_000
-
 	pub const StringLimit: u32 = 50;
-
-	// Matches Paseo Asset Hub: system_para_deposit(1, 68)
 	pub const MetadataDepositBase: Balance = system_para_deposit(1, 68); // 2_006_800_000
-
-	// Matches Paseo Asset Hub: system_para_deposit(0, 1)
 	pub const MetadataDepositPerByte: Balance = system_para_deposit(0, 1); // 100_000
 }
 

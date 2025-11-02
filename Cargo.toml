@@ -19,7 +19,6 @@ codec = { package = "parity-scale-codec", version = "3.7.5", default-features = 
   "derive",
 ] }
 futures = "0.3.31"
-futures-timer = "3.0"
 hex-literal = { version = "0.4.1" }
 jsonrpsee = { version = "0.24.10", features = ["server"] }
 log = { version = "0.4.22", default-features = false }

@@ -128,16 +128,12 @@ const AVERAGE_ON_INITIALIZE_RATIO: Perbill = Perbill::from_percent(10);
 const MAXIMUM_BLOCK_WEIGHT: Weight =
 	Weight::from_parts(WEIGHT_REF_TIME_PER_SECOND.saturating_mul(2), u64::MAX);
 
-// Currency constants matching Paseo Asset Hub
-// Based on Paseo: UNITS = 10_000_000_000 (10^10)
 const UNITS: Balance = 10_000_000_000;
 const DOLLARS: Balance = UNITS;
 const CENTS: Balance = DOLLARS / 100;
 #[allow(dead_code)]
 const MILLICENTS: Balance = CENTS / 1_000;
 
-// Existential deposit matching Paseo Asset Hub system parachain
-// Paseo Asset Hub: SYSTEM_PARA_EXISTENTIAL_DEPOSIT / 10
 pub const EXISTENTIAL_DEPOSIT: Balance = CENTS; // 100_000_000
 
 impl pallet_insecure_randomness_collective_flip::Config for Runtime {}
