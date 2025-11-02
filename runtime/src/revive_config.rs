@@ -1,6 +1,7 @@
 use crate::{
-	demo_precompile::DemoPrecompile, Address, Balance, Balances, EthExtraImpl, Perbill, Runtime,
-	RuntimeCall, RuntimeEvent, RuntimeHoldReason, RuntimeOrigin, Signature, Timestamp,
+	demo_precompile::DemoPrecompile, foo_precompile::Foo, Address, Balance, Balances, EthExtraImpl,
+	Perbill, Runtime, RuntimeCall, RuntimeEvent, RuntimeHoldReason, RuntimeOrigin, Signature,
+	Timestamp,
 };
 use frame_support::{
 	parameter_types,
@@ -38,7 +39,11 @@ impl pallet_revive::Config for Runtime {
 	type DepositPerChildTrieItem = DepositPerChildTrieItem;
 	type DepositPerByte = DepositPerByte;
 	type WeightInfo = pallet_revive::weights::SubstrateWeight<Self>;
-	type Precompiles = (ERC20<Self, InlineIdConfig<0x120>, ()>, DemoPrecompile<Self>);
+	type Precompiles = (
+		ERC20<Self, InlineIdConfig<0x120>, ()>,
+		Foo<Self, crate::foo_precompile::InlineIdConfig<12>>,
+		DemoPrecompile<Self>,
+	);
 	type AddressMapper = pallet_revive::AccountId32Mapper<Self>;
 	type RuntimeMemory = ConstU32<{ 128 * 1024 * 1024 }>;
 	type PVFMemory = ConstU32<{ 512 * 1024 * 1024 }>;

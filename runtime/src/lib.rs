@@ -8,6 +8,7 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 mod assets_config;
 mod demo_precompile;
+mod foo_precompile;
 mod revive_config;
 
 extern crate alloc;
