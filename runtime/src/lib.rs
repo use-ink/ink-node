@@ -129,9 +129,13 @@ const AVERAGE_ON_INITIALIZE_RATIO: Perbill = Perbill::from_percent(10);
 const MAXIMUM_BLOCK_WEIGHT: Weight =
 	Weight::from_parts(WEIGHT_REF_TIME_PER_SECOND.saturating_mul(2), u64::MAX);
 
-// Unit = the base number of indivisible units for balances
-const MILLIUNIT: Balance = 1_000_000_000;
-pub const EXISTENTIAL_DEPOSIT: Balance = MILLIUNIT;
+const UNITS: Balance = 10_000_000_000;
+const DOLLARS: Balance = UNITS;
+const CENTS: Balance = DOLLARS / 100;
+#[allow(dead_code)]
+const MILLICENTS: Balance = CENTS / 1_000;
+
+pub const EXISTENTIAL_DEPOSIT: Balance = CENTS; // 100_000_000
 
 impl pallet_insecure_randomness_collective_flip::Config for Runtime {}
 

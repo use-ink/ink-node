@@ -122,6 +122,7 @@ cumulus-client-consensus-proposer ={ git = "https://github.com/paritytech/polkad
 cumulus-client-consensus-aura = { git = "https://github.com/paritytech/polkadot-sdk", rev = "9136565addc23a552f6960a7581f13c8dfc651f1" }
 cumulus-client-consensus-common ={ git = "https://github.com/paritytech/polkadot-sdk", rev = "9136565addc23a552f6960a7581f13c8dfc651f1" }
 cumulus-client-service = { git = "https://github.com/paritytech/polkadot-sdk", rev = "9136565addc23a552f6960a7581f13c8dfc651f1" }
+cumulus-client-parachain-inherent = { git = "https://github.com/paritytech/polkadot-sdk", rev = "9136565addc23a552f6960a7581f13c8dfc651f1", default-features = false }
 cumulus-pallet-aura-ext = { git = "https://github.com/paritytech/polkadot-sdk", rev = "9136565addc23a552f6960a7581f13c8dfc651f1", default-features = false }
 cumulus-pallet-dmp-queue = { git = "https://github.com/paritytech/polkadot-sdk", rev = "9136565addc23a552f6960a7581f13c8dfc651f1", default-features = false }
 cumulus-pallet-parachain-system = { git = "https://github.com/paritytech/polkadot-sdk", rev = "9136565addc23a552f6960a7581f13c8dfc651f1", default-features = false }
