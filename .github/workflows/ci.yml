@@ -97,7 +97,7 @@ jobs:
           cargo test --release --all
           rm -rf target/
           echo "######## Building eth-rpc ########"
-          git clone --depth 100 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
+          git clone --depth 300 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
           cd polkadot-sdk
           git checkout $POLKADOT_SDK_COMMIT
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc
@@ -158,7 +158,7 @@ jobs:
           cp target/aarch64-unknown-linux-gnu/release/ink-node ./artifacts/ink-node-linux-arm64/ink-node
           rm -rf target/
           echo "######## Building eth-rpc ########"
-          git clone --depth 100 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
+          git clone --depth 300 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
           cd polkadot-sdk
           git checkout $POLKADOT_SDK_COMMIT
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc --target aarch64-unknown-linux-gnu
@@ -184,7 +184,7 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Clone polkadot-sdk
         run: |
-          git clone --depth 100 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
+          git clone --depth 300 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@1ccc07ccd54b6048295516a3eb89b192c35057dc # master from 12.09.2024
       - name: Install protobuf
