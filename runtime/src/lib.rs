@@ -385,7 +385,7 @@ pallet_revive::impl_runtime_apis_plus_revive_traits!(
 			VERSION
 		}
 
-		fn execute_block(block: <Block as BlockT>::LazyBlock) {
+		fn execute_block(block: Block) {
 			Executive::execute_block(block);
 		}
 
@@ -427,7 +427,7 @@ pallet_revive::impl_runtime_apis_plus_revive_traits!(
 		}
 
 		fn check_inherents(
-			block: <Block as BlockT>::LazyBlock,
+			block: Block,
 			data: sp_inherents::InherentData,
 		) -> sp_inherents::CheckInherentsResult {
 			data.check_extrinsics(&block)
