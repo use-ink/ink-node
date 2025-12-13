@@ -15,6 +15,7 @@ use cumulus_client_cli::CollatorOptions;
 use cumulus_client_collator::service::CollatorService;
 use cumulus_client_consensus_aura::collators::lookahead::{self as aura, Params as AuraParams};
 use cumulus_client_consensus_common::ParachainBlockImport as TParachainBlockImport;
+use cumulus_client_consensus_proposer::Proposer;
 use cumulus_client_parachain_inherent::MockValidationDataInherentDataProvider;
 use cumulus_client_service::{
 	build_network, build_relay_chain_interface, prepare_node_config, start_relay_chain_tasks,
@@ -185,13 +186,15 @@ fn start_consensus(
 	overseer_handle: OverseerHandle,
 	announce_block: Arc<dyn Fn(Hash, Option<Vec<u8>>) + Send + Sync>,
 ) -> Result<(), sc_service::Error> {
-	let proposer = sc_basic_authorship::ProposerFactory::with_proof_recording(
+	let proposer_factory = sc_basic_authorship::ProposerFactory::with_proof_recording(
 		task_manager.spawn_handle(),
 		client.clone(),
 		transaction_pool,
 		prometheus_registry,
 		telemetry.clone(),
 	);
+
+	let proposer = Proposer::new(proposer_factory);
 
 	let collator_service = CollatorService::new(
 		client.clone(),
@@ -335,7 +338,6 @@ pub async fn start_parachain_node(
 		system_rpc_tx,
 		tx_handler_controller,
 		telemetry: telemetry.as_mut(),
-		tracing_execute_block: None,
 	})?;
 
 	if let Some(hwbench) = hwbench {
@@ -604,7 +606,7 @@ pub async fn start_dev_parachain_node(
 
 	// The aura digest provider will provide digests that match the provided timestamp data.
 	// Without this, the AURA parachain runtime complains about slot mismatches.
-	let aura_digest_provider = AuraConsensusDataProvider::new_with_slot_duration(slot_duration);
+	let aura_digest_provider = AuraConsensusDataProvider::new(client.clone());
 
 	// Extract para_id from chain spec
 	let para_id = crate::chain_spec::Extensions::try_get(&*config.chain_spec)
@@ -671,7 +673,6 @@ pub async fn start_dev_parachain_node(
 		sync_service,
 		config,
 		telemetry: telemetry.as_mut(),
-		tracing_execute_block: None,
 	})?;
 
 	Ok(task_manager)
