@@ -61,7 +61,7 @@ mod tests {
 			},
 			H160,
 		},
-		ExecConfig, U256,
+		ExecConfig, TransactionLimits, U256,
 	};
 	use sp_runtime::{traits::IdentityLookup, AccountId32, BuildStorage};
 
@@ -159,8 +159,10 @@ mod tests {
 				RuntimeOrigin::signed(ALICE),
 				precompile_addr,
 				U256::zero(),
-				Weight::MAX,
-				u128::MAX,
+				TransactionLimits::WeightAndDeposit {
+					weight_limit: Weight::MAX,
+					deposit_limit: u128::MAX,
+				},
 				encoded_call,
 				ExecConfig::new_substrate_tx(),
 			);
