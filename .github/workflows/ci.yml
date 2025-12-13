@@ -17,8 +17,7 @@ concurrency:
 # repo env variable doesn't work for PR from forks
 env:
   CI_IMAGE: "useink/ci"
-  POLKADOT_SDK_COMMIT: "cbab8ed4be1941420dd25dc81102fb79d8e2a7f0"
-  POLKADOT_SDK_BRANCH: "master"
+  POLKADOT_SDK_BRANCH: "unstable2507"
   RUST_VERSION: 1.88.0
 
 jobs:
@@ -99,7 +98,7 @@ jobs:
           echo "######## Building eth-rpc ########"
           git clone --depth 300 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
           cd polkadot-sdk
-          git checkout $POLKADOT_SDK_COMMIT
+          git checkout $POLKADOT_SDK_BRANCH
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc
           cd ..
           echo "######## Packing artifacts ########"
@@ -160,7 +159,7 @@ jobs:
           echo "######## Building eth-rpc ########"
           git clone --depth 300 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
           cd polkadot-sdk
-          git checkout $POLKADOT_SDK_COMMIT
+          git checkout $POLKADOT_SDK_BRANCH
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc --target aarch64-unknown-linux-gnu
           cd ..
           echo "######## Packing artifacts ########"
@@ -223,7 +222,7 @@ jobs:
           cargo build --release --target x86_64-apple-darwin
           echo "######## cargo build aarch64-apple-darwin eth-rpc ########"
           cd polkadot-sdk
-          git checkout $POLKADOT_SDK_COMMIT
+          git checkout $POLKADOT_SDK_BRANCH
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc --target aarch64-apple-darwin
           echo "######## cargo build x86_64-apple-darwin eth-rpc ########"
           cargo build --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc --target x86_64-apple-darwin
