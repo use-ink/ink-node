@@ -39,7 +39,7 @@ jobs:
     container:
       image: ${{ needs.set-image.outputs.CI_IMAGE }}
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@v6
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
         with:
@@ -130,7 +130,7 @@ jobs:
           remove_packages_one_command: true
           remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell /usr/local/julia /usr/local/aws-cli /usr/local/aws-sam-cli /usr/share/gradle"
           testing: false
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@v6
       - name: Install ARM64 toolchain
         run: |
           rustup target add aarch64-unknown-linux-gnu
@@ -180,7 +180,7 @@ jobs:
       matrix:
         os: ["macos-latest"]
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@v6
       - name: Clone polkadot-sdk
         run: |
           git clone --depth 300 --branch $POLKADOT_SDK_BRANCH https://github.com/paritytech/polkadot-sdk.git
@@ -249,7 +249,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@v6
       - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           name: build-linux
